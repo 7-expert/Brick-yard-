@@ -1,7 +1,6 @@
 "use client";
 import { useEffect } from 'react';
 import Lenis from 'lenis';
-import 'lenis/dist/lenis.css'; // Sometimes needed for standard base styles, though usually optional
 
 export default function SmoothScroll({ children }) {
   useEffect(() => {
