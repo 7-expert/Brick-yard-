@@ -4,10 +4,16 @@ import { ArrowDown } from "lucide-react";
 export default function Hero() {
   return (
     <div className="relative">
-      <div
-        className="h-screen min-h-[700px] bg-cover bg-center relative flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-12 lg:px-20"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')" }}
-      >
+      <div className="h-screen min-h-[700px] relative flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-12 lg:px-20 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/video.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-ink/30"></div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
