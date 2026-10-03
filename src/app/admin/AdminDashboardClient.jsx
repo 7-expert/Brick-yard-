@@ -63,7 +63,7 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
               setSelectedBooking(payload.new);
             }
           } else if (payload.eventType === 'DELETE') {
-            setBookings((prev) => prev.filter((b) => b.id === payload.old.id));
+            setBookings((prev) => prev.filter((b) => b.id !== payload.old.id));
             if (selectedBooking && selectedBooking.id === payload.old.id) {
               setSelectedBooking(null);
             }
@@ -205,12 +205,20 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
   };
 
   const exportCSV = () => {
+    const escapeCSV = (val) => {
+      if (val === null || val === undefined) return '""';
+      return `"${String(val).replace(/"/g, '""')}"`;
+    };
+
     const headers = [
       'ID',
       'Created At',
+      'First Name',
+      'Last Name',
       'Full Name',
       'Email',
       'Phone',
+      'Country Code',
       'Inquiry Type',
       'Property / Item',
       'Status',
@@ -218,26 +226,39 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
       'Admin Notes',
     ];
 
-    const rows = filteredBookings.map((b) => [
-      b.id,
-      new Date(b.created_at).toLocaleString(),
-      `"${(b.full_name || `${b.first_name || ''} ${b.last_name || ''}`).replace(/"/g, '""')}"`,
-      `"${(b.email || '').replace(/"/g, '""')}"`,
-      `"${(b.phone || '').replace(/"/g, '""')}"`,
-      `"${(b.inquiry_type || '').replace(/"/g, '""')}"`,
-      `"${(b.property_title || b.plan_title || '').replace(/"/g, '""')}"`,
-      b.status,
-      `"${(b.message || '').replace(/"/g, '""')}"`,
-      `"${(b.admin_notes || '').replace(/"/g, '""')}"`,
-    ]);
+    const rows = filteredBookings.map((b) => {
+      const derivedFirst = b.first_name || (b.full_name ? b.full_name.trim().split(/\s+/)[0] : '');
+      const derivedLast = b.last_name || (b.full_name ? b.full_name.trim().split(/\s+/).slice(1).join(' ') : '');
+      const derivedFull = b.full_name || `${b.first_name || ''} ${b.last_name || ''}`.trim();
+      const formattedDate = b.created_at ? new Date(b.created_at).toISOString().replace('T', ' ').slice(0, 19) : '';
+      const formattedPhone = b.phone ? `\t${b.phone}` : ''; // Prefix with tab so Excel doesn't convert to scientific notation
 
+      return [
+        escapeCSV(b.id),
+        escapeCSV(formattedDate),
+        escapeCSV(derivedFirst),
+        escapeCSV(derivedLast),
+        escapeCSV(derivedFull),
+        escapeCSV(b.email),
+        escapeCSV(formattedPhone),
+        escapeCSV(b.country_code),
+        escapeCSV(b.inquiry_type),
+        escapeCSV(b.property_title || b.plan_title),
+        escapeCSV(b.status),
+        escapeCSV(b.message),
+        escapeCSV(b.admin_notes),
+      ];
+    });
+
+    // Add UTF-8 BOM prefix (\uFEFF) so Excel opens CSV with clean columns & encoding
     const csvContent =
-      'data:text/csv;charset=utf-8,' +
-      [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
+      '\uFEFF' +
+      [headers.map(escapeCSV).join(','), ...rows.map((row) => row.join(','))].join('\r\n');
 
-    const encodedUri = encodeURI(csvContent);
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', url);
     link.setAttribute(
       'download',
       `brickyard_bookings_${new Date().toISOString().slice(0, 10)}.csv`
@@ -245,6 +266,7 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const openDrawer = (booking) => {
@@ -287,7 +309,7 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
       <header className="bg-[#191917] text-cream-light border-b border-gold-500/20 shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <Image src="/logo1_crop.png" alt="Brickyard" width={36} height={36} className="object-contain" />
+            <Image src="/logo2.1.png" alt="Brickyard" width={42} height={42} className="object-contain" />
             <div>
               <h1 className="font-serif text-xl font-bold uppercase tracking-wider text-cream-light">
                 Brickyard Admin
@@ -299,12 +321,6 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
           </div>
 
           <div className="flex items-center gap-4">
-            {realtimeConnected && (
-              <div className="hidden sm:flex items-center gap-2 text-xs text-emerald-400 bg-white/5 border border-emerald-500/30 px-3 py-1.5 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Realtime Active</span>
-              </div>
-            )}
             <button
               onClick={fetchLatest}
               title="Refresh Data"
@@ -653,11 +669,15 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="text-xs text-ink-soft block">First Name</span>
-                    <span className="font-medium text-ink">{selectedBooking.first_name || 'N/A'}</span>
+                    <span className="font-medium text-ink">
+                      {selectedBooking.first_name || (selectedBooking.full_name ? selectedBooking.full_name.trim().split(/\s+/)[0] : 'N/A')}
+                    </span>
                   </div>
                   <div>
                     <span className="text-xs text-ink-soft block">Last Name</span>
-                    <span className="font-medium text-ink">{selectedBooking.last_name || 'N/A'}</span>
+                    <span className="font-medium text-ink">
+                      {selectedBooking.last_name || (selectedBooking.full_name ? selectedBooking.full_name.trim().split(/\s+/).slice(1).join(' ') : '') || 'N/A'}
+                    </span>
                   </div>
                   <div>
                     <span className="text-xs text-ink-soft block">Phone Number</span>

@@ -6,12 +6,13 @@ export async function updateSession(request) {
     request,
   });
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const rawKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+  const supabaseUrl = rawUrl.trim().replace(/\/+$/, '');
+  const supabaseKey = rawKey.trim();
 
   if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
-    // If Supabase env vars are not configured yet, skip session check for public routes,
-    // but protect /admin routes with a clear message or redirect to login.
     const pathname = request.nextUrl.pathname;
     if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
       const url = request.nextUrl.clone();

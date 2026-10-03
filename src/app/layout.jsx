@@ -1,9 +1,8 @@
 import { Playfair_Display } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import LayoutContent from "@/components/LayoutContent";
 
 const waldenburg = localFont({
   src: "./fonts/Waldenburg.woff2",
@@ -27,11 +26,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning className={`${waldenburg.variable} ${playfair.variable} antialiased font-sans min-h-screen flex flex-col`}>
         <SmoothScroll>
-          <Navigation />
-          <main className="flex-grow">
+          <LayoutContent>
             {children}
-          </main>
-          <Footer />
+          </LayoutContent>
         </SmoothScroll>
       </body>
     </html>

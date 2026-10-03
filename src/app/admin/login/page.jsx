@@ -126,8 +126,8 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-[#191917] flex flex-col justify-center py-12 px-6 lg:px-8 font-sans text-cream-light">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white/10 border border-gold-400/40 mb-4 shadow-xl">
-          <Image src="/logo1_crop.png" alt="Brickyard" width={40} height={40} className="object-contain" />
+        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 border border-gold-400/40 mb-4 shadow-xl p-2">
+          <Image src="/logo2.1.png" alt="Brickyard" width={64} height={64} className="object-contain" />
         </div>
         <h2 className="font-serif text-3xl md:text-4xl font-bold uppercase tracking-widest text-cream-light">
           Brickyard Admin

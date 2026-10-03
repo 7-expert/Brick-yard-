@@ -66,10 +66,18 @@ export async function POST(request) {
 
     const data = validationResult.data;
 
-    // Derive full_name if first_name / last_name provided
-    let derivedFullName = data.full_name;
-    if (!derivedFullName && (data.first_name || data.last_name)) {
-      derivedFullName = `${data.first_name || ''} ${data.last_name || ''}`.trim();
+    // Derive names bidirectionally
+    let firstName = data.first_name?.trim() || null;
+    let lastName = data.last_name?.trim() || null;
+    let fullName = data.full_name?.trim() || null;
+
+    if (fullName && (!firstName || !lastName)) {
+      const parts = fullName.split(/\s+/);
+      if (!firstName) firstName = parts[0] || null;
+      if (!lastName) lastName = parts.slice(1).join(' ') || null;
+    }
+    if (!fullName && (firstName || lastName)) {
+      fullName = `${firstName || ''} ${lastName || ''}`.trim();
     }
 
     const supabase = await createClient();
@@ -78,9 +86,9 @@ export async function POST(request) {
       .from('bookings')
       .insert([
         {
-          first_name: data.first_name || null,
-          last_name: data.last_name || null,
-          full_name: derivedFullName || null,
+          first_name: firstName,
+          last_name: lastName,
+          full_name: fullName,
           email: data.email || null,
           phone: data.phone,
           country_code: data.country_code || null,
@@ -96,7 +104,6 @@ export async function POST(request) {
 
     if (error) {
       console.error('Supabase insertion error:', error);
-      // Fallback response for unconfigured local env
       if (process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder')) {
         return NextResponse.json({
           success: true,
