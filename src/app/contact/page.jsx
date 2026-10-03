@@ -1,4 +1,5 @@
 import ContactInfoCard from "@/components/ContactInfoCard";
+import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Contact Us | Brickyard Real Estate",
@@ -26,74 +27,7 @@ export default function ContactPage() {
           </div>
 
           {/* Right Side: Contact Form */}
-          <div className="bg-cream-light p-10 rounded-xl border border-cream-dark shadow-sm">
-            <h2 className="font-serif text-2xl font-bold uppercase tracking-widest text-ink mb-8">Send a Message</h2>
-            
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-sans text-ink-soft uppercase tracking-wider mb-2">First Name</label>
-                  <input
-                    type="text"
-                    className="w-full bg-white border border-cream-dark rounded px-4 py-3 text-sm focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400"
-                    placeholder="John"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-sans text-ink-soft uppercase tracking-wider mb-2">Last Name</label>
-                  <input
-                    type="text"
-                    className="w-full bg-white border border-cream-dark rounded px-4 py-3 text-sm focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400"
-                    placeholder="Doe"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans text-ink-soft uppercase tracking-wider mb-2">Email Address</label>
-                <input
-                  type="email"
-                  className="w-full bg-white border border-cream-dark rounded px-4 py-3 text-sm focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400"
-                  placeholder="john@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans text-ink-soft uppercase tracking-wider mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  className="w-full bg-white border border-cream-dark rounded px-4 py-3 text-sm focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400"
-                  placeholder="+1 (555) 000-0000"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans text-ink-soft uppercase tracking-wider mb-2">Inquiry Type</label>
-                <select className="w-full bg-white border border-cream-dark rounded px-4 py-3 text-sm focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 appearance-none">
-                  <option>Buying a Property</option>
-                  <option>Selling a Property</option>
-                  <option>Renting</option>
-                  <option>General Inquiry</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-sans text-ink-soft uppercase tracking-wider mb-2">Message</label>
-                <textarea
-                  rows={5}
-                  className="w-full bg-white border border-cream-dark rounded px-4 py-3 text-sm focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 resize-none"
-                  placeholder="How can we help you?"
-                ></textarea>
-              </div>
-
-              <button
-                type="button"
-                className="w-full bg-gold-gradient text-white py-4 uppercase tracking-widest text-sm font-bold rounded shadow-lg hover:opacity-90 transition-opacity"
-              >
-                Submit Inquiry
-              </button>
-            </form>
-          </div>
+          <ContactForm />
         </div>
 
       </div>

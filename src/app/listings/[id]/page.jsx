@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { properties } from "@/data/properties";
 import PropertyGallery from "@/components/PropertyGallery";
 import AgentCard from "@/components/AgentCard";
+import ListingActions from "./ListingActions";
 import { MapPin, BedDouble, Bath, Square, Calendar, Check, MessageSquare } from "lucide-react";
 
 export async function generateMetadata({ params }) {
@@ -140,15 +141,7 @@ export default async function PropertyDetail({ params }) {
             <div className="sticky top-28">
               <AgentCard agent={property.agent} />
               
-              <div className="mt-6 space-y-4">
-                <button className="w-full bg-ink text-white py-4 uppercase tracking-widest text-sm font-bold rounded shadow-lg hover:bg-ink-soft transition-colors flex justify-center items-center gap-2">
-                  <MessageSquare className="w-4 h-4" />
-                  Request Details
-                </button>
-                <button className="w-full bg-white text-ink border-2 border-ink py-4 uppercase tracking-widest text-sm font-bold rounded hover:bg-cream transition-colors">
-                  Schedule Tour
-                </button>
-              </div>
+              <ListingActions propertyTitle={property.title} />
             </div>
           </div>
         </div>

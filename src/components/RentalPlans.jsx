@@ -1,7 +1,8 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import BookingModal from './BookingModal';
 
 const plans = [
   {
@@ -32,6 +33,7 @@ const plans = [
 
 export default function RentalPlans() {
   const [activePlan, setActivePlan] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="bg-[#FCFAF5] py-20 lg:py-28 px-6 md:px-12">
@@ -68,7 +70,10 @@ export default function RentalPlans() {
                     ))}
                   </ul>
                   
-                  <button className="bg-gold-500 hover:bg-gold-600 text-white font-sans font-medium px-8 py-3 rounded-sm transition-colors w-max shadow-lg">
+                  <button 
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-gold-500 hover:bg-gold-600 text-white font-sans font-medium px-8 py-3 rounded-sm transition-colors w-max shadow-lg cursor-pointer"
+                  >
                     Book Now
                   </button>
                 </div>
@@ -133,6 +138,13 @@ export default function RentalPlans() {
         </div>
 
       </div>
+
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        defaultItemTitle={plans[activePlan].title}
+        defaultType="Rental Plan Booking"
+      />
     </section>
   );
 }
