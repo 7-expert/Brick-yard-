@@ -33,7 +33,11 @@ function AdminLoginForm() {
     });
 
     if (authError) {
-      setError(authError.message || 'Invalid email or password');
+      if (authError.message === 'Failed to fetch' || authError.name === 'TypeError') {
+        setError('Connection Error: Could not reach Supabase. Please ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are added to your Vercel Project Environment Variables and redeploy.');
+      } else {
+        setError(authError.message || 'Invalid email or password');
+      }
       setLoading(false);
       return;
     }

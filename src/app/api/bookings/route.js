@@ -82,7 +82,8 @@ export async function POST(request) {
 
     const supabase = await createClient();
 
-    const { data: inserted, error } = await supabase
+    // Do NOT chain .select() here because anonymous visitors are blocked by RLS from SELECTING bookings
+    const { error } = await supabase
       .from('bookings')
       .insert([
         {
@@ -98,9 +99,7 @@ export async function POST(request) {
           plan_title: data.plan_title || null,
           status: 'pending',
         },
-      ])
-      .select()
-      .single();
+      ]);
 
     if (error) {
       console.error('Supabase insertion error:', error);
@@ -119,7 +118,6 @@ export async function POST(request) {
     return NextResponse.json({
       success: true,
       message: 'Thank you! Your inquiry has been submitted successfully.',
-      booking: inserted,
     });
   } catch (err) {
     console.error('API /api/bookings error:', err);
