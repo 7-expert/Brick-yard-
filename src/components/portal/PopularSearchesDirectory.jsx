@@ -109,151 +109,133 @@ export default function PopularSearchesDirectory() {
   const currentData = directoryData[activeRegion] || directoryData['New York'];
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-ink/10">
-      
-      {/* Title */}
-      <div className="text-center sm:text-left mb-6">
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-sans text-ink tracking-tight">
-          Popular Real Estate Searches
-        </h2>
-      </div>
+    <section className="w-full bg-[#FAF7F2] py-20 px-6 sm:px-8 lg:px-12 border-t border-[#E8E1D5] text-[#162E22]">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Title */}
+        <div className="mb-6">
+          <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.25em] text-[#66776F] uppercase block mb-2">
+            DIRECTORY & MARKETS
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl text-[#162E22] font-normal tracking-tight">
+            Popular Real Estate Searches
+          </h2>
+        </div>
 
-      {/* Sale / Rent Toggle */}
-      <div className="flex justify-center sm:justify-start gap-8 border-b border-ink/10 pb-3 mb-6">
-        {['Sale', 'Rent'].map((mode) => (
-          <button
-            key={mode}
-            type="button"
-            onClick={() => setActiveMode(mode)}
-            className={`font-sans font-bold text-base sm:text-lg pb-2 transition-all relative ${
-              activeMode === mode
-                ? 'text-ink border-b-2 border-gold-600'
-                : 'text-ink-soft/60 hover:text-ink'
-            }`}
-          >
-            {mode}
-          </button>
-        ))}
-      </div>
-
-      {/* Region Sub-tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-        {regions.map((region) => {
-          const isActive = activeRegion === region;
-          return (
+        {/* Sale / Rent Toggle */}
+        <div className="flex gap-8 border-b border-[#E8E1D5] pb-3 mb-6">
+          {['Sale', 'Rent'].map((mode) => (
             <button
-              key={region}
+              key={mode}
               type="button"
-              onClick={() => setActiveRegion(region)}
-              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all ${
-                isActive
-                  ? 'bg-cream-dark border border-gold-400 text-ink shadow-sm'
-                  : 'bg-white border border-ink/10 text-ink-soft hover:text-ink hover:bg-cream-light'
+              onClick={() => setActiveMode(mode)}
+              className={`font-mono text-xs uppercase tracking-wider pb-2 transition-all cursor-pointer ${
+                activeMode === mode
+                  ? 'text-[#162E22] border-b-2 border-[#162E22] font-bold'
+                  : 'text-[#7D8A82] hover:text-[#162E22]'
               }`}
             >
-              {region}
+              {mode}
             </button>
-          );
-        })}
-      </div>
-
-      {/* 3 Column Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-        
-        {/* Column 1: Apartments */}
-        <div>
-          <h3 className="font-bold text-xs uppercase tracking-wider text-gold-800 mb-4 pb-2 border-b border-ink/10">
-            Apartments & Penthouses
-          </h3>
-          <ul className="space-y-3">
-            {currentData.apartments.slice(0, isExpanded ? undefined : 4).map((item, i) => (
-              <li key={i}>
-                <Link
-                  href={item.href}
-                  className="text-ink-soft hover:text-gold-700 transition-colors leading-relaxed block hover:translate-x-0.5 duration-200"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Column 2: Villas */}
-        <div>
-          <h3 className="font-bold text-xs uppercase tracking-wider text-gold-800 mb-4 pb-2 border-b border-ink/10">
-            Villas & Private Estates
-          </h3>
-          <ul className="space-y-3">
-            {currentData.villas.slice(0, isExpanded ? undefined : 4).map((item, i) => (
-              <li key={i}>
-                <Link
-                  href={item.href}
-                  className="text-ink-soft hover:text-gold-700 transition-colors leading-relaxed block hover:translate-x-0.5 duration-200"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Column 3: Commercial & Other */}
-        <div>
-          <h3 className="font-bold text-xs uppercase tracking-wider text-gold-800 mb-4 pb-2 border-b border-ink/10">
-            Commercial & Specialty
-          </h3>
-          <ul className="space-y-3">
-            {currentData.other.slice(0, isExpanded ? undefined : 4).map((item, i) => (
-              <li key={i}>
-                <Link
-                  href={item.href}
-                  className="text-ink-soft hover:text-gold-700 transition-colors leading-relaxed block hover:translate-x-0.5 duration-200"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-      </div>
-
-      {/* View More Button */}
-      <div className="mt-8 pt-4 border-t border-ink/5 flex justify-center">
-        <button
-          type="button"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gold-800 hover:text-ink transition-colors cursor-pointer"
-        >
-          <span>{isExpanded ? 'View Less' : 'View More Categories'}</span>
-          {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
-      </div>
-
-      {/* Learn More pills */}
-      <div className="mt-12 p-6 bg-cream-light/60 rounded-2xl border border-ink/10 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div>
-          <h4 className="font-bold text-sm sm:text-base text-ink">
-            Learn more about prime luxury markets
-          </h4>
-          <p className="text-xs text-ink-soft mt-0.5">
-            Quarterly market reports, yield statistics, and private transaction indexes.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          {regions.map((reg) => (
-            <Link
-              key={reg}
-              href={`/about?region=${encodeURIComponent(reg)}`}
-              className="px-3.5 py-1.5 rounded-full bg-white border border-ink/10 text-xs font-semibold text-ink hover:border-gold-400 hover:text-gold-700 transition-all shadow-sm"
-            >
-              {reg} Market Guide
-            </Link>
           ))}
         </div>
-      </div>
 
+        {/* Region Sub-tabs */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+          {regions.map((region) => {
+            const isActive = activeRegion === region;
+            return (
+              <button
+                key={region}
+                type="button"
+                onClick={() => setActiveRegion(region)}
+                className={`px-4 py-1.5 text-xs font-medium tracking-wide transition-colors whitespace-nowrap cursor-pointer ${
+                  isActive
+                    ? 'bg-[#162E22] text-[#FAF7F2]'
+                    : 'bg-[#EDE5D8] hover:bg-[#E2D8C8] text-[#24332B]'
+                }`}
+              >
+                {region}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 3 Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+          
+          {/* Column 1: Apartments */}
+          <div>
+            <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#66776F] mb-4 pb-2 border-b border-[#E8E1D5]">
+              Apartments & Penthouses
+            </h3>
+            <ul className="space-y-3">
+              {currentData.apartments.slice(0, isExpanded ? undefined : 4).map((item, i) => (
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className="text-xs text-[#4A5750] hover:text-[#162E22] transition-colors leading-relaxed block hover:translate-x-0.5 duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 2: Villas */}
+          <div>
+            <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#66776F] mb-4 pb-2 border-b border-[#E8E1D5]">
+              Villas & Private Estates
+            </h3>
+            <ul className="space-y-3">
+              {currentData.villas.slice(0, isExpanded ? undefined : 4).map((item, i) => (
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className="text-xs text-[#4A5750] hover:text-[#162E22] transition-colors leading-relaxed block hover:translate-x-0.5 duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Commercial & Other */}
+          <div>
+            <h3 className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#66776F] mb-4 pb-2 border-b border-[#E8E1D5]">
+              Commercial & Specialty
+            </h3>
+            <ul className="space-y-3">
+              {currentData.other.slice(0, isExpanded ? undefined : 4).map((item, i) => (
+                <li key={i}>
+                  <Link
+                    href={item.href}
+                    className="text-xs text-[#4A5750] hover:text-[#162E22] transition-colors leading-relaxed block hover:translate-x-0.5 duration-200"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+        </div>
+
+        {/* View More Button */}
+        <div className="mt-8 pt-4 border-t border-[#E8E1D5] flex justify-center">
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-[#162E22] hover:underline cursor-pointer"
+          >
+            <span>{isExpanded ? 'View Less' : 'View More Categories'}</span>
+            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+        </div>
+
+      </div>
     </section>
   );
 }

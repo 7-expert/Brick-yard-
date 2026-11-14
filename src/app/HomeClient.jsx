@@ -42,13 +42,13 @@ export default function HomeClient() {
         onRegisterInterest={(title, type) => handleOpenBooking(title, type)}
       />
 
-      {/* Brand Partners Showcase */}
-      <ClientLogos />
-
       {/* 4. Market Updates & Discover Popular Neighbourhoods (Matching Image 5) */}
       <MarketInsightsAndNeighbourhoods
         onSelectTopic={(topic) => handleOpenBooking(`Inquiry on ${topic}`, 'Intelligence & Advisory')}
       />
+
+      {/* Brand Partners Showcase */}
+      <ClientLogos />
 
       {/* Rental & Corporate Leases Portfolio */}
       <div id="rental-plans">

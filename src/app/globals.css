@@ -18,7 +18,7 @@
 
   --background-image-gold-gradient: linear-gradient(135deg, #E8CE8B 0%, #C09A3E 45%, #8A6423 100%);
 
-  --font-serif: var(--font-waldenburg), serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-waldenburg), sans-serif;
 }
 
