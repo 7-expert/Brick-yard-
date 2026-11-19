@@ -1,151 +1,133 @@
 import { notFound } from "next/navigation";
+import { DUBAI_PROPERTIES } from "@/data/dubaiProperties";
 import { properties } from "@/data/properties";
-import PropertyGallery from "@/components/PropertyGallery";
-import AgentCard from "@/components/AgentCard";
-import ListingActions from "./ListingActions";
-import { MapPin, BedDouble, Bath, Square, Calendar, Check, MessageSquare } from "lucide-react";
+import ListingDetailClient from "./ListingDetailClient";
+import { formatAED } from "@/lib/tokens";
 
 export async function generateMetadata({ params }) {
-  // Fix Next.js 15 params promise
   const resolvedParams = await params;
-  const property = properties.find((p) => p.id === resolvedParams.id);
-  if (!property) return { title: "Property Not Found" };
-  return { title: `${property.title} | Brickyard Real Estate` };
+  const propId = resolvedParams.id;
+  
+  // Look up in DUBAI_PROPERTIES
+  let prop = DUBAI_PROPERTIES.find((p) => p.id === propId || p.slug === propId);
+  
+  // Fallback to legacy properties
+  if (!prop) {
+    const legacy = properties.find((p) => p.id === propId);
+    if (legacy) {
+      prop = {
+        title: legacy.title,
+        priceAED: 1850000,
+        location: legacy.location,
+        description: legacy.description,
+      };
+    }
+  }
+
+  if (!prop) {
+    return { title: "Property Not Found | Brickyard Real Estate" };
+  }
+
+  return {
+    title: `${prop.title} | Brickyard Properties Dubai`,
+    description: prop.description?.slice(0, 155) || `View details for ${prop.title} in ${prop.location}, Dubai.`,
+    openGraph: {
+      title: `${prop.title} - AED ${prop.priceAED?.toLocaleString() || prop.price}`,
+      description: prop.description?.slice(0, 155),
+    },
+  };
 }
 
-export default async function PropertyDetail({ params }) {
-  // Fix Next.js 15 params promise
+export default async function PropertyDetailPage({ params }) {
   const resolvedParams = await params;
-  const property = properties.find((p) => p.id === resolvedParams.id);
-  
+  const propId = resolvedParams.id;
+
+  // 1. Look up in DUBAI_PROPERTIES
+  let property = DUBAI_PROPERTIES.find((p) => p.id === propId || p.slug === propId);
+
+  // 2. Fallback to legacy properties if user navigates to an old URL
+  if (!property) {
+    const legacy = properties.find((p) => p.id === propId);
+    if (legacy) {
+      // Map legacy property to Bayut-standard structure
+      property = {
+        id: legacy.id,
+        slug: legacy.id,
+        title: legacy.title,
+        purpose: legacy.type === "sale" ? "sale" : "rent",
+        type: "Apartment",
+        priceAED: 2450000,
+        rentFrequency: "yearly",
+        location: legacy.location || "Downtown Dubai",
+        address: `${legacy.location || 'Downtown Dubai'}, Dubai, UAE`,
+        beds: legacy.beds || 2,
+        baths: legacy.baths || 2,
+        sqft: legacy.sqft || 1450,
+        isVerified: true,
+        isPremium: true,
+        images: [
+          legacy.image,
+          "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
+        ],
+        floorPlanImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80",
+        description: legacy.description || "A luxury contemporary residence in Dubai offering premium finishes and landmark skyline views.",
+        amenities: ["Balcony", "Built-in Wardrobes", "Central A/C", "Covered Parking", "Shared Gym", "Concierge Service"],
+        nearbyPOIs: [
+          { name: "Dubai Mall", distance: "4 mins walk", type: "mall" },
+          { name: "Burj Khalifa Metro", distance: "6 mins walk", type: "metro" },
+          { name: "Downtown Park", distance: "2 mins walk", type: "park" },
+        ],
+        agent: {
+          id: "agent-1",
+          name: "Tariq Al-Mansoor",
+          title: "Senior Luxury Director",
+          agency: "Brickyard Prime Real Estate LLC",
+          licence: "RERA #39821",
+          image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80",
+          phone: "+971 50 118 2342",
+          whatsapp: "971501182342",
+          email: "tariq@brickyard.ae",
+          languages: ["English", "Arabic"],
+          responseTime: "Under 5 mins",
+          verified: true,
+        },
+      };
+    }
+  }
+
   if (!property) {
     notFound();
   }
 
-  // Simulate multiple images for the gallery
-  const galleryImages = [
-    property.image,
-    "https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-  ];
+  // Schema.org RealEstateListing JSON-LD
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    "name": property.title,
+    "description": property.description,
+    "url": `https://brickyard.ae/listings/${property.slug || property.id}`,
+    "offers": {
+      "@type": "Offer",
+      "price": property.priceAED,
+      "priceCurrency": "AED",
+      "availability": "https://schema.org/InStock",
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": property.location,
+      "addressRegion": "Dubai",
+      "addressCountry": "AE",
+    },
+  };
 
   return (
-    <div className="bg-white min-h-screen pb-24">
-      {/* Hero section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-6">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <span className="bg-gold-gradient text-white text-[10px] font-sans uppercase tracking-widest px-3 py-1.5 rounded-sm shadow-md">
-                For {property.type === "sale" ? "Sale" : "Rent"}
-              </span>
-              <div className="flex items-center gap-1.5 text-ink-soft text-sm">
-                <MapPin className="w-4 h-4 text-gold-500" />
-                <span>{property.location}</span>
-              </div>
-            </div>
-            <h1 className="font-serif text-3xl md:text-5xl text-ink font-bold mb-2">{property.title}</h1>
-          </div>
-          <div className="text-right">
-            <div className="font-serif text-4xl text-gold-600 font-bold">{property.price}</div>
-          </div>
-        </div>
-
-        <PropertyGallery images={galleryImages} title={property.title} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-12">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Key Stats */}
-            <div className="flex flex-wrap gap-8 py-6 border-y border-cream-dark mb-10">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center text-white shadow-sm">
-                  <BedDouble className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xl font-serif font-bold text-ink">{property.beds}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-ink-soft font-sans">Bedrooms</div>
-                </div>
-              </div>
-              <div className="w-px h-12 bg-cream-dark hidden sm:block"></div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center text-white shadow-sm">
-                  <Bath className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xl font-serif font-bold text-ink">{property.baths}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-ink-soft font-sans">Bathrooms</div>
-                </div>
-              </div>
-              <div className="w-px h-12 bg-cream-dark hidden sm:block"></div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center text-white shadow-sm">
-                  <Square className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xl font-serif font-bold text-ink">{property.sqft}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-ink-soft font-sans">Square Feet</div>
-                </div>
-              </div>
-              <div className="w-px h-12 bg-cream-dark hidden sm:block"></div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gold-gradient flex items-center justify-center text-white shadow-sm">
-                  <Calendar className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xl font-serif font-bold text-ink">{property.yearBuilt}</div>
-                  <div className="text-[10px] uppercase tracking-widest text-ink-soft font-sans">Year Built</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Description */}
-            <div className="mb-12">
-              <h2 className="font-serif text-2xl font-bold uppercase tracking-widest text-ink mb-6">Property Overview</h2>
-              <p className="font-sans text-ink-soft leading-relaxed text-lg">
-                {property.description}
-              </p>
-              <p className="font-sans text-ink-soft leading-relaxed text-lg mt-4">
-                This stunning property exemplifies the meticulous craftsmanship and timeless elegance that Brickyard Real Estate is known for presenting. Contact our dedicated agent to arrange a private viewing of this exceptional offering.
-              </p>
-            </div>
-
-            {/* Amenities */}
-            <div className="mb-12">
-              <h2 className="font-serif text-2xl font-bold uppercase tracking-widest text-ink mb-6">Amenities & Features</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {property.amenities.map((amenity, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-full bg-gold-50 flex items-center justify-center text-gold-600">
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="font-sans text-ink-soft text-sm">{amenity}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Map Placeholder */}
-            <div>
-              <h2 className="font-serif text-2xl font-bold uppercase tracking-widest text-ink mb-6">Location</h2>
-              <div className="w-full h-80 bg-cream rounded-xl border border-cream-dark flex flex-col items-center justify-center">
-                <MapPin className="w-10 h-10 text-gold-400 mb-4" />
-                <span className="font-sans text-ink-soft">Map visualization for {property.location}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-28">
-              <AgentCard agent={property.agent} />
-              
-              <ListingActions propertyTitle={property.title} />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ListingDetailClient property={property} />
+    </>
   );
 }

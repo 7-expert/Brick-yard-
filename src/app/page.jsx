@@ -1,8 +1,8 @@
 import HomeClient from "./HomeClient";
 
 export const metadata = {
-  title: "Brickyard | Premier Real Estate, Luxury Developments & Rentals",
-  description: "Explore world-class luxury developments, private villas, penthouses, and algorithmic TruEstimate™ market valuations with Brickyard.",
+  title: "Brickyard | Dubai Property Portal - Sale, Rent & Off-Plan Properties",
+  description: "Search verified Dubai apartments, villas, and off-plan investments. Find properties in Downtown Dubai, Dubai Marina, Palm Jumeirah and Business Bay.",
 };
 
 export default function Home() {

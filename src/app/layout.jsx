@@ -1,35 +1,36 @@
-import { Playfair_Display } from "next/font/google";
-import localFont from "next/font/local";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/SmoothScroll";
 import LayoutContent from "@/components/LayoutContent";
 
-const waldenburg = localFont({
-  src: "./fonts/Waldenburg.woff2",
-  variable: "--font-waldenburg",
-  weight: "500",
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
+  weight: ["500", "600"],
+  display: "swap",
 });
 
 export const metadata = {
-  title: "Brickyard Real Estate",
-  description: "Find Your Next Address",
+  title: {
+    default: "Brickyard | Dubai Property Portal - Apartments, Villas & Off-Plan for Sale & Rent",
+    template: "%s | Brickyard Real Estate Dubai",
+  },
+  description: "Search 15,000+ verified properties for sale and rent in Dubai, UAE. Find apartments, luxury villas, and off-plan projects with TruBroker™ verified agents.",
+  keywords: ["Dubai real estate", "apartments for rent in Dubai", "properties for sale Dubai", "off plan projects Dubai", "Brickyard"],
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning className={`${waldenburg.variable} ${playfair.variable} antialiased font-sans min-h-screen flex flex-col`}>
-        <SmoothScroll>
-          <LayoutContent>
-            {children}
-          </LayoutContent>
-        </SmoothScroll>
+    <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
+      <body suppressHydrationWarning className="antialiased min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
+        <LayoutContent>
+          {children}
+        </LayoutContent>
       </body>
     </html>
   );

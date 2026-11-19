@@ -1,49 +1,91 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #F5F1E8;
-  --color-cream-light: #FAF7F0;
-  --color-cream-dark: #EDE6D6;
+  --color-primary: #0A5C4F;
+  --color-primary-hover: #08493F;
+  --color-primary-surface: #E6F2F0;
+  --color-primary-border: #B3D6D0;
 
-  --color-gold-50: #FBF4E0;
-  --color-gold-200: #E8CE8B;
-  --color-gold-400: #D4AF5A;
-  --color-gold-500: #C09A3E;
-  --color-gold-600: #A67C2E;
-  --color-gold-700: #8A6423;
-  --color-gold-900: #4A3612;
+  --color-accent: #FF6B35;
+  --color-accent-hover: #E85522;
+  --color-accent-surface: #FFF1EC;
+  --color-accent-border: #FFD5C5;
 
-  --color-ink: #1A1A1A;
-  --color-ink-soft: #3A3A3A;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #F8FAFC;
+  --color-surface-muted: #F1F5F9;
 
-  --background-image-gold-gradient: linear-gradient(135deg, #E8CE8B 0%, #C09A3E 45%, #8A6423 100%);
+  --color-border: #E2E8F0;
+  --color-border-subtle: #F1F5F9;
 
-  --font-serif: var(--font-playfair), Georgia, serif;
-  --font-sans: var(--font-waldenburg), sans-serif;
+  --color-slate-950: #020617;
+  --color-slate-900: #0F172A;
+  --color-slate-700: #334155;
+  --color-slate-500: #64748B;
+  --color-slate-400: #94A3B8;
+
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-jakarta), var(--font-sans), sans-serif;
 }
 
-/* Lenis recommended base styles */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
+/* Fluid typography & base styles */
+html {
+  font-family: var(--font-sans);
+  color: #0F172A;
+  background-color: #F8FAFC;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background-color: var(--color-cream);
-  color: var(--color-ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 150ms ease-out transitions for hover/press, respecting prefers-reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  a, button, input, select, textarea {
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+/* Minimum 44px touch targets on mobile interactive controls */
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Clean accessible scrollbar for horizontal filter chips */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Shimmer animation for skeleton cards */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.animate-shimmer::after {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+  content: '';
 }
