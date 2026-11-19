@@ -135,3 +135,4 @@ export default function MapView({ properties = [], activePropertyId = null, onSe
     </div>
   );
 }
+

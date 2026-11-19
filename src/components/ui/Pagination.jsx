@@ -67,3 +67,4 @@ export default function Pagination({ currentPage = 1, totalPages = 1, onPageChan
     </nav>
   );
 }
+

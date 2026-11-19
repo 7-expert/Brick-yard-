@@ -69,3 +69,4 @@ export function formatNumber(val) {
   if (!val && val !== 0) return '0';
   return new Intl.NumberFormat('en-AE').format(Number(val));
 }
+

@@ -209,3 +209,4 @@ export default function ListingCard({ property, onQuickView }) {
     </article>
   );
 }
+

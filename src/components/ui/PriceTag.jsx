@@ -21,3 +21,4 @@ export default function PriceTag({ price, period = null, size = 'default', isAcc
     </span>
   );
 }
+

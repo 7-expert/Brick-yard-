@@ -544,3 +544,4 @@ export const DUBAI_AREA_GUIDES = [
     lifestyle: ["Canal boardwalk running tracks", "Rooftop lounges", "Boutique hotels"],
   },
 ];
+

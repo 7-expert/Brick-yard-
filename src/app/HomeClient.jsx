@@ -13,9 +13,11 @@ import {
   ChevronRight,
   Clock,
   Compass,
-  Play,
+  CheckCircle2,
+  PhoneCall,
   MessageCircle,
-  ExternalLink,
+  Calculator,
+  Navigation,
 } from 'lucide-react';
 import SearchBar from '@/components/ui/SearchBar';
 import ListingCard from '@/components/ui/ListingCard';
@@ -45,241 +47,204 @@ export default function HomeClient() {
   return (
     <div className="w-full flex flex-col bg-slate-50 text-slate-900">
       
-      {/* 1. SEARCH-FIRST HERO (Bayut Information Architecture & Visual Reference) */}
-      <section className="relative w-full bg-slate-900 text-white pt-10 sm:pt-14 pb-14 sm:pb-20 px-4 sm:px-6 lg:px-12 overflow-hidden">
-        {/* Lifestyle Interior Background Image */}
+      {/* 1. CINEMATIC HERO SECTION (Unique Luxury Architectural Aesthetic) */}
+      <section className="relative w-full min-h-[580px] sm:min-h-[660px] flex items-center justify-center text-white px-4 sm:px-6 lg:px-12 py-16 sm:py-24 overflow-hidden">
+        {/* Luxury Architectural Photography Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/hero_lifestyle_banner.jpg"
-            alt="Real homes live here - Luxury living space"
-            className="w-full h-full object-cover object-center brightness-60"
+            src="/waterfront_villa_1790348391865.jpg"
+            alt="Exceptional Dubai Living - Waterfront Villa"
+            className="w-full h-full object-cover object-center scale-102 transition-transform duration-1000"
           />
-          {/* Subtle gradient overlay to guarantee text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/50 to-slate-950/80 pointer-events-none" />
+          {/* Rich luxury charcoal & emerald vignette overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/85 pointer-events-none" />
         </div>
 
-        <div className="relative max-w-5xl mx-auto flex flex-col items-center text-center z-10">
+        <div className="relative max-w-5xl mx-auto flex flex-col items-center text-center z-10 w-full">
           
+          {/* Eyebrow Trust Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold uppercase tracking-wider mb-4 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-[#FF6B35] animate-pulse" />
+            <span>Dubai's Premier Architectural Brokerage</span>
+          </div>
+
           {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white max-w-3xl leading-[1.12] mb-2 sm:mb-3">
-            Real homes live here
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white max-w-4xl leading-[1.12] mb-3">
+            Exceptional Living in Dubai
           </h1>
-          <p className="text-sm sm:text-lg text-emerald-100 font-medium max-w-xl mb-6 sm:mb-8">
-            Real Data. Real Brokers. Real Properties.
+          <p className="text-sm sm:text-lg text-emerald-100/90 font-normal max-w-2xl mb-8 leading-relaxed">
+            Curated luxury residences, verified market data, and private client advisory across Dubai’s most coveted master communities.
           </p>
 
-          {/* SearchBar (Properties, New Projects, Transactions, Agents - TruEstimate removed per user instruction) */}
+          {/* Luxury Cohesive Search Console */}
           <SearchBar className="text-left w-full" />
 
-          {/* Experience the Journey Pill */}
-          <div className="mt-6 flex justify-center">
-            <button
-              type="button"
-              onClick={() => {
-                const el = document.getElementById('featured-projects');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md border border-white/20 text-white text-xs font-semibold transition-all cursor-pointer shadow-sm"
-            >
-              <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-                <Play className="w-2.5 h-2.5 text-white fill-white ml-0.5" />
-              </div>
-              <span>Experience the Journey</span>
-            </button>
-          </div>
-
         </div>
       </section>
 
-      {/* 2. SECTION AFTER HERO: 2 BANNERS + 3 LIGHT FEATURE CARDS (Reference Image 2) */}
-      <section className="w-full max-w-7xl mx-auto py-8 sm:py-12 px-4 sm:px-6 lg:px-12 space-y-5">
-        
-        {/* BANNER 1: Sell or Rent Your Property with Confidence */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0A5C4F] via-[#0C6A5B] to-[#0A5C4F] text-white p-5 sm:p-7 shadow-sm border border-emerald-800/40 flex flex-col sm:flex-row items-center justify-between gap-5">
-          {/* Left: Illustrated city graphic */}
-          <div className="flex items-center gap-4 text-center sm:text-left">
-            <div className="hidden md:flex shrink-0 items-center justify-center w-14 h-14 rounded-xl bg-white/10 backdrop-blur-xs border border-white/20">
-              <Building2 className="w-7 h-7 text-emerald-200" />
-            </div>
-            <div>
-              <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/20 text-emerald-100">
-                  Sale & Rent
-                </span>
-                <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white">
-                  Sell or Rent Your Property with Confidence
-                </h3>
-              </div>
-              <p className="text-xs sm:text-sm text-emerald-100">
-                Connect with a trusted agent to secure the best deal, faster.
-              </p>
-            </div>
+      {/* 2. TRUST & MARKET VOLUME STRIP */}
+      <section className="w-full bg-white border-b border-slate-200/80 py-6 px-4 sm:px-6 lg:px-12 shadow-xs">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x divide-slate-100">
+          <div className="flex flex-col items-center px-2">
+            <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">AED 18.5B+</span>
+            <span className="text-xs text-slate-500 font-medium mt-1">Transacted Volume</span>
           </div>
+          <div className="flex flex-col items-center px-2">
+            <span className="text-2xl sm:text-3xl font-bold text-[#0A5C4F] tracking-tight">15,200+</span>
+            <span className="text-xs text-slate-500 font-medium mt-1">Verified Dubai Residences</span>
+          </div>
+          <div className="flex flex-col items-center px-2">
+            <span className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">100% RERA</span>
+            <span className="text-xs text-slate-500 font-medium mt-1">Regulated & Compliant</span>
+          </div>
+          <div className="flex flex-col items-center px-2">
+            <span className="text-2xl sm:text-3xl font-bold text-[#FF6B35] tracking-tight">&lt; 5 mins</span>
+            <span className="text-xs text-slate-500 font-medium mt-1">Prime Advisor Response Time</span>
+          </div>
+        </div>
+      </section>
 
-          {/* Right Action Button */}
-          <Link
-            href="/contact?type=sell-or-rent"
-            className="tap-target px-5 py-2.5 rounded-lg bg-white hover:bg-emerald-50 text-[#0A5C4F] font-bold text-xs sm:text-sm tracking-wide transition-all shadow-xs shrink-0 flex items-center gap-1.5"
-          >
-            <span>Get Started</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
+      {/* 3. ARCHITECTURAL INTELLIGENCE & PRIVATE CLIENT SERVICES (Original Bespoke Design) */}
+      <section className="w-full max-w-7xl mx-auto py-14 sm:py-20 px-4 sm:px-6 lg:px-12">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0A5C4F] bg-[#E6F2F0] px-3 py-1 rounded-full inline-block mb-2">
+            Intelligence Meets Intuition
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+            Designed around your property journey
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-2">
+            Advanced valuation algorithms, lifestyle navigation, and bespoke private client brokerage tailored to discerning buyers and investors.
+          </p>
         </div>
 
-        {/* BANNER 2: Find a TruBroker™ */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-[#0A5C4F] text-white p-4 sm:p-6 shadow-sm border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 text-center sm:text-left">
-            {/* Overlapping Agent Avatars */}
-            <div className="flex -space-x-2 shrink-0">
-              {TRUBROKER_AGENTS.map((agent, idx) => (
-                <div key={agent.id} className="relative w-10 h-10 rounded-full border-2 border-slate-900 overflow-hidden bg-slate-700">
-                  <img src={agent.image} alt={agent.name} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-slate-900" />
-                </div>
-              ))}
-            </div>
-
-            <div>
-              <h3 className="text-base sm:text-lg font-bold tracking-tight text-white flex items-center justify-center sm:justify-start gap-1.5">
-                <span>Find a TruBroker™</span>
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300">
-                Find trusted agents awarded for their excellent performance
-              </p>
-            </div>
-          </div>
-
-          {/* Right Button */}
-          <Link
-            href="/agents"
-            className="tap-target px-5 py-2 rounded-lg bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs sm:text-sm tracking-wide transition-all shadow-xs shrink-0 flex items-center gap-1.5"
-          >
-            <span>Find My Agent</span>
-            <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-
-        {/* 3 LIGHT FEATURE CARDS (TruEstimate, Search 2.0, Map View - Reference Image 2 "make light this design") */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 pt-2">
+        {/* 3 Architectural Service Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           
-          {/* Card 1: TruEstimate™ */}
+          {/* Card 1: Valuation Engine */}
           <Link
             href="/contact?type=valuation"
-            className="group relative bg-[#F0FDF9] hover:bg-[#E6F8F2] border border-emerald-100/90 rounded-2xl p-6 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between min-h-[170px]"
+            className="group bg-white rounded-2xl border border-slate-200/90 p-7 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
           >
             <div>
-              <h4 className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-[#0A5C4F] transition-colors">
-                TruEstimate™
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 flex items-center gap-1 group-hover:text-[#0A5C4F]">
-                <span>Find out how much your property is worth</span>
-                <span className="text-[#0A5C4F] font-bold">›</span>
+              <div className="w-12 h-12 rounded-xl bg-[#E6F2F0] text-[#0A5C4F] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+                <Calculator className="w-6 h-6" />
+              </div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1">
+                Property Valuation
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#0A5C4F] transition-colors mb-2">
+                Instant Market Estimate
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Receive algorithmic market valuations calculated against official Dubai Land Department transaction history and live absorption metrics.
               </p>
             </div>
-
-            {/* Illustration: Vector Building with Price Tag */}
-            <div className="mt-4 flex items-end justify-between">
-              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-100/60 px-2 py-0.5 rounded-full">
-                AI Valuation
-              </span>
-              <div className="w-16 h-14 relative flex items-end justify-center">
-                <svg viewBox="0 0 64 56" className="w-full h-full text-emerald-600/70" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="18" y="12" width="28" height="40" rx="2" fill="#E6F2F0" />
-                  <line x1="24" y1="20" x2="28" y2="20" />
-                  <line x1="34" y1="20" x2="38" y2="20" />
-                  <line x1="24" y1="28" x2="28" y2="28" />
-                  <line x1="34" y1="28" x2="38" y2="28" />
-                  <line x1="24" y1="36" x2="28" y2="36" />
-                  <line x1="34" y1="36" x2="38" y2="36" />
-                  <circle cx="48" cy="14" r="8" fill="#FF6B35" stroke="none" />
-                  <text x="48" y="17" fill="white" fontSize="9" fontWeight="bold" textAnchor="middle">$$</text>
-                </svg>
-              </div>
+            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center text-xs font-bold text-[#0A5C4F] group-hover:underline">
+              <span>Calculate home value</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
-          {/* Card 2: Search 2.0 */}
+          {/* Card 2: Lifestyle & Commute Filter */}
           <Link
             href="/listings"
-            className="group relative bg-[#F0FDF9] hover:bg-[#E6F8F2] border border-emerald-100/90 rounded-2xl p-6 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between min-h-[170px]"
+            className="group bg-white rounded-2xl border border-slate-200/90 p-7 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
           >
             <div>
-              <h4 className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-[#0A5C4F] transition-colors">
-                Search 2.0
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 flex items-center gap-1 group-hover:text-[#0A5C4F]">
-                <span>Find homes by drive time</span>
-                <span className="text-[#0A5C4F] font-bold">›</span>
+              <div className="w-12 h-12 rounded-xl bg-amber-50 text-[#FF6B35] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+                <Compass className="w-6 h-6" />
+              </div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1">
+                Lifestyle Navigation
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#0A5C4F] transition-colors mb-2">
+                Commute & Lifestyle Search
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Filter Dubai residences by exact commute times to DIFC and Downtown, proximity to accredited private schools, and marina yacht moorings.
               </p>
             </div>
-
-            {/* Illustration: Vector Car on road */}
-            <div className="mt-4 flex items-end justify-between">
-              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-100/60 px-2 py-0.5 rounded-full">
-                Commute Filter
-              </span>
-              <div className="w-18 h-14 relative flex items-end justify-center">
-                <svg viewBox="0 0 72 48" className="w-full h-full text-emerald-600/70" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M4 38 L68 38" strokeDasharray="3 3" />
-                  <path d="M12 34 L18 20 Q22 16 32 16 L44 16 Q52 16 56 22 L62 34 Z" fill="#0A5C4F" stroke="none" />
-                  <circle cx="24" cy="36" r="5" fill="#334155" stroke="none" />
-                  <circle cx="50" cy="36" r="5" fill="#334155" stroke="none" />
-                  <circle cx="56" cy="12" r="3" fill="#10B981" stroke="none" />
-                </svg>
-              </div>
+            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center text-xs font-bold text-[#0A5C4F] group-hover:underline">
+              <span>Explore lifestyle filters</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
-          {/* Card 3: Map View */}
+          {/* Card 3: Interactive Location Map */}
           <Link
             href="/listings?view=map"
-            className="group relative bg-[#F0FDF9] hover:bg-[#E6F8F2] border border-emerald-100/90 rounded-2xl p-6 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between min-h-[170px]"
+            className="group bg-white rounded-2xl border border-slate-200/90 p-7 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
           >
             <div>
-              <h4 className="text-lg font-bold text-slate-900 tracking-tight group-hover:text-[#0A5C4F] transition-colors">
-                Map View
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 flex items-center gap-1 group-hover:text-[#0A5C4F]">
-                <span>Search for properties in preferred areas using a map</span>
-                <span className="text-[#0A5C4F] font-bold">›</span>
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#0A5C4F] flex items-center justify-center mb-5 group-hover:scale-105 transition-transform">
+                <Navigation className="w-6 h-6" />
+              </div>
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1">
+                Location Intelligence
+              </span>
+              <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#0A5C4F] transition-colors mb-2">
+                Interactive Polygon Map
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Pinpoint prime waterfront and golf communities using dynamic polygon boundaries, live price clustering, and metro proximity overlays.
               </p>
             </div>
-
-            {/* Illustration: Map Pin on hills */}
-            <div className="mt-4 flex items-end justify-between">
-              <span className="text-[11px] font-semibold text-emerald-800 bg-emerald-100/60 px-2 py-0.5 rounded-full">
-                Polygon Search
-              </span>
-              <div className="w-18 h-14 relative flex items-end justify-center">
-                <svg viewBox="0 0 72 48" className="w-full h-full text-emerald-600/70" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M6 40 Q24 24 40 34 T70 30" fill="none" stroke="#A7F3D0" strokeWidth="2" />
-                  <circle cx="48" cy="18" r="6" fill="#F59E0B" stroke="none" />
-                  <path d="M48 24 L48 34" stroke="#F59E0B" strokeWidth="2" />
-                  <circle cx="26" cy="22" r="4" fill="#0A5C4F" stroke="none" />
-                </svg>
-              </div>
+            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center text-xs font-bold text-[#0A5C4F] group-hover:underline">
+              <span>Launch interactive map</span>
+              <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
 
         </div>
 
+        {/* Private Client Advisory Full-Width Strip */}
+        <div className="bg-gradient-to-r from-[#0A5C4F] to-[#08493F] rounded-2xl text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
+          <div className="max-w-2xl text-center sm:text-left">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-200 block mb-1">
+              Private Client Advisory
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white mb-1.5">
+              Selling or leasing an exceptional Dubai property?
+            </h3>
+            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              Connect directly with our licensed senior advisors for discreet marketing, institutional valuation, and targeted exposure to verified international buyers.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              href="/contact?type=sell-or-rent"
+              className="tap-target px-5 py-2.5 rounded-xl bg-white hover:bg-emerald-50 text-[#0A5C4F] font-bold text-xs sm:text-sm tracking-wide transition-all shadow-xs"
+            >
+              List with Brickyard
+            </Link>
+            <a
+              href="tel:+971501182342"
+              className="tap-target px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm border border-white/20 transition-all flex items-center gap-1.5"
+            >
+              <PhoneCall className="w-3.5 h-3.5" />
+              <span>Call Specialist</span>
+            </a>
+          </div>
+        </div>
+
       </section>
 
-      {/* 3. POPULAR NEW PROJECTS IN UAE (Image 8 Benchmark Card Grid) */}
-      <section id="featured-projects" className="w-full bg-white border-y border-slate-200/80 py-12 sm:py-16 px-4 sm:px-6 lg:px-12">
+      {/* 4. CURATED DEVELOPMENTS: New Projects in UAE */}
+      <section className="w-full bg-white border-y border-slate-200/80 py-14 sm:py-20 px-4 sm:px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-[#0A5C4F] text-xs font-semibold mb-2">
-                <Building2 className="w-3.5 h-3.5" />
-                <span>Off-Plan Releases</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Popular New Projects in UAE
+              <span className="text-xs font-bold uppercase tracking-wider text-[#FF6B35] bg-amber-50 px-3 py-1 rounded-full inline-block mb-2">
+                Off-Plan Architecture
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+                Curated New Developments
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Handpicked developer releases in prime master communities with direct developer payment plans.
+                Master-planned residences from Emaar, Nakheel, and Sobha with developer payment flexibility.
               </p>
             </div>
 
@@ -287,51 +252,50 @@ export default function HomeClient() {
               href="/projects"
               className="tap-target inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[#0A5C4F] hover:text-[#08493F] transition-colors group"
             >
-              <span>Explore all new projects</span>
+              <span>View all projects</span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          {/* Projects Card Grid (Design Reference Image 8) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* Projects Card Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {DUBAI_PROJECTS.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group"
+                className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
               >
                 {/* 4:3 Project Thumbnail with badge */}
                 <div className="relative w-full aspect-[4/3] overflow-hidden bg-slate-100">
                   <img
                     src={project.image}
                     alt={project.name}
-                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/95 text-slate-900 text-[10px] font-bold tracking-wider uppercase shadow-xs">
+                  <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-slate-900 text-[10px] font-bold tracking-wider uppercase shadow-xs">
                     {project.badge}
                   </span>
                 </div>
 
                 {/* Project Details */}
-                <div className="p-4 flex flex-col flex-1 justify-between">
+                <div className="p-5 flex flex-col flex-1 justify-between">
                   <div>
+                    <span className="text-[11px] font-semibold text-[#0A5C4F] uppercase tracking-wider block mb-1">
+                      {project.developer}
+                    </span>
                     <h3 className="font-bold text-base text-slate-900 group-hover:text-[#0A5C4F] transition-colors leading-snug">
                       {project.name}
                     </h3>
-                    
-                    <span className="text-xs text-slate-500 font-medium block mt-0.5">
-                      {project.unitsAvailable.includes('Villa') ? 'Villas' : 'Apartments'}
-                    </span>
 
-                    <p className="flex items-center gap-1 text-xs text-slate-500 mt-1.5 mb-3.5">
+                    <p className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 mb-3.5">
                       <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                       <span className="truncate">{project.location}, Dubai</span>
                     </p>
 
-                    {/* Side-by-Side Specs Box (Launch Price | Handover - Reference Image 8) */}
-                    <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-xs mb-4 flex items-center justify-between">
+                    {/* Architectural Spec Box */}
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs mb-4 flex items-center justify-between">
                       <div className="flex-1 pr-2 border-r border-slate-200/80">
-                        <span className="text-slate-400 text-[10px] uppercase font-semibold block">Launch Price</span>
+                        <span className="text-slate-400 text-[10px] uppercase font-semibold block">Starting Price</span>
                         <span className="font-bold text-[#0A5C4F] text-xs sm:text-sm">
                           {formatAED(project.startingPrice)}
                         </span>
@@ -345,47 +309,35 @@ export default function HomeClient() {
                     </div>
                   </div>
 
-                  {/* Register Interest WhatsApp Action Button (Image 8 style) */}
+                  {/* Register Interest Action Button */}
                   <button
                     type="button"
                     onClick={() => openProjectLeadModal(project)}
-                    className="tap-target w-full py-2.5 px-3 rounded-lg bg-[#E6F2F0] hover:bg-[#D5EBE8] text-[#0A5C4F] font-bold text-xs tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-98"
+                    className="tap-target w-full py-2.5 px-3 rounded-xl bg-[#0A5C4F] hover:bg-[#08493F] text-white font-bold text-xs tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-98"
                   >
-                    <MessageCircle className="w-4 h-4 text-[#0A5C4F]" />
-                    <span>Register Interest</span>
+                    <MessageCircle className="w-4 h-4 text-emerald-200" />
+                    <span>Register Private Interest</span>
                   </button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Bottom "View all projects in Dubai >" button */}
-          <div className="mt-8 flex justify-center">
-            <Link
-              href="/projects"
-              className="tap-target inline-flex items-center gap-1 px-6 py-2.5 rounded-full bg-[#E6F2F0] hover:bg-[#D5EBE8] text-[#0A5C4F] text-xs sm:text-sm font-bold tracking-wide transition-colors"
-            >
-              <span>View all projects in Dubai</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
         </div>
       </section>
 
-      {/* 4. CURATED RAIL: TruBroker™ Verified Sale Listings */}
-      <section className="w-full max-w-7xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-12">
+      {/* 5. VERIFIED PROPERTIES FOR SALE (4-Col Card Grid) */}
+      <section className="w-full max-w-7xl mx-auto py-14 sm:py-20 px-4 sm:px-6 lg:px-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#E6F2F0] text-[#0A5C4F] text-xs font-semibold mb-2">
-              <Award className="w-3.5 h-3.5" />
-              <span>TruBroker™ Certified</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#0A5C4F] bg-[#E6F2F0] px-3 py-1 rounded-full inline-block mb-2">
+              Verified Marketplace
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
               Featured Properties for Sale
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Handpicked residences verified for title deed, price accuracy, and immediate availability.
+              Handpicked residences verified for title deed, price authenticity, and immediate availability.
             </p>
           </div>
 
@@ -393,7 +345,7 @@ export default function HomeClient() {
             href="/listings?purpose=sale"
             className="tap-target inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[#0A5C4F] hover:text-[#08493F] transition-colors group"
           >
-            <span>View all properties for sale</span>
+            <span>View all sale properties</span>
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -406,20 +358,19 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* 5. CURATED RAIL: Popular Dubai Communities */}
-      <section className="w-full bg-white border-y border-slate-200/80 py-12 sm:py-16 px-4 sm:px-6 lg:px-12">
+      {/* 6. POPULAR DUBAI COMMUNITIES */}
+      <section className="w-full bg-white border-y border-slate-200/80 py-14 sm:py-20 px-4 sm:px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold mb-2">
-                <Compass className="w-3.5 h-3.5 text-[#0A5C4F]" />
-                <span>Location Intelligence</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Explore Popular Dubai Communities
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-600 bg-slate-100 px-3 py-1 rounded-full inline-block mb-2">
+                Submarket Guides
+              </span>
+              <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+                Explore Dubai Communities
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                In-depth rental yields, price trends, schools, and transport guides for Dubai's prime submarkets.
+                In-depth rental yields, price trends, and infrastructure analyses for Dubai’s premier enclaves.
               </p>
             </div>
 
@@ -427,7 +378,7 @@ export default function HomeClient() {
               href="/areas"
               className="tap-target inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[#0A5C4F] hover:text-[#08493F] transition-colors group"
             >
-              <span>View all area guides</span>
+              <span>View all neighborhood guides</span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -438,16 +389,16 @@ export default function HomeClient() {
               <Link
                 key={area.slug}
                 href={`/areas/${area.slug}`}
-                className="group bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+                className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
               >
                 <div className="relative w-full aspect-[4/3] overflow-hidden bg-slate-100">
                   <img
                     src={area.heroImage}
                     alt={area.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 text-white">
                     <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-300 block mb-0.5">
                       Average ROI: {area.roi}
@@ -465,7 +416,7 @@ export default function HomeClient() {
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-slate-500">
                     <span>1BHK Avg: <strong>{formatAED(area.avgRent1Bed)}/yr</strong></span>
                     <span className="font-semibold text-[#0A5C4F] group-hover:underline flex items-center gap-0.5">
-                      Read guide →
+                      Explore guide →
                     </span>
                   </div>
                 </div>
@@ -475,19 +426,18 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* 6. CURATED RAIL: Recently Added Verified Rentals */}
-      <section className="w-full max-w-7xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-12">
+      {/* 7. VERIFIED RENTALS RAIL */}
+      <section className="w-full max-w-7xl mx-auto py-14 sm:py-20 px-4 sm:px-6 lg:px-12">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold mb-2">
-              <Clock className="w-3.5 h-3.5" />
-              <span>Rental Market</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded-full inline-block mb-2">
+              Rental Collection
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight">
               Verified Dubai Rentals
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Browse move-in ready apartments and townhouses with yearly and flexible payment terms.
+              Browse move-in ready residences with certified contracts and flexible payment cheques.
             </p>
           </div>
 
@@ -507,33 +457,41 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* 7. HIGH-CONVERSION LANDLORD & OWNER VALUATION BANNER */}
+      {/* 8. HIGH-CONVERSION LANDLORD VALUATION BANNER */}
       <section className="w-full max-w-7xl mx-auto pb-16 px-4 sm:px-6 lg:px-12">
-        <div className="bg-[#0A5C4F] rounded-2xl text-white p-8 sm:p-12 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="max-w-xl">
+        <div className="bg-[#0A5C4F] rounded-3xl text-white p-8 sm:p-14 shadow-lg flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+          {/* Subtle background motif */}
+          <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none w-96 h-96">
+            <svg viewBox="0 0 100 100" className="w-full h-full fill-white">
+              <polygon points="50,0 100,50 50,100 0,50" />
+            </svg>
+          </div>
+
+          <div className="max-w-xl relative z-10 text-center lg:text-left">
             <span className="text-xs font-bold uppercase tracking-wider text-[#FF6B35] bg-white/10 px-3 py-1 rounded-full border border-white/20 inline-block mb-3">
-              Owners & Landlords
+              Owners & Institutional Landlords
             </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mb-2">
-              Thinking of selling or leasing your Dubai home?
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white mb-3">
+              List your Dubai residence with verified advisors.
             </h2>
             <p className="text-sm text-emerald-100 font-normal leading-relaxed">
-              Connect with our licensed TruBroker™ specialists to get an instant comparative market valuation and reach 250,000+ verified active buyers.
+              Connect directly with our licensed property directors to receive a complimentary comparative market analysis and present your home to verified pre-qualified buyers.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0">
+          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0 relative z-10">
             <Link
               href="/contact?type=valuation"
-              className="tap-target px-6 py-3.5 rounded-lg bg-[#FF6B35] hover:bg-[#E85522] text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-sm transition-all text-center"
+              className="tap-target px-7 py-3.5 rounded-xl bg-[#FF6B35] hover:bg-[#e85522] text-white font-bold text-xs sm:text-sm uppercase tracking-wider shadow-md transition-all text-center active:scale-98"
             >
-              Request Free Valuation
+              Request Valuation
             </Link>
             <a
               href="tel:+971501182342"
-              className="tap-target px-6 py-3.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-xs sm:text-sm transition-colors text-center"
+              className="tap-target px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-xs sm:text-sm transition-colors text-center flex items-center justify-center gap-2"
             >
-              Speak with Advisor
+              <PhoneCall className="w-4 h-4" />
+              <span>+971 50 118 2342</span>
             </a>
           </div>
         </div>
@@ -553,7 +511,7 @@ export default function HomeClient() {
             
             <div className="mb-4">
               <span className="text-xs font-bold text-[#0A5C4F] uppercase tracking-wider">
-                Register Your Interest
+                Direct Developer Registration
               </span>
               <h3 className="text-xl font-bold text-slate-900 mt-1">
                 {selectedProject.name}
