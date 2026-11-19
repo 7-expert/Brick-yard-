@@ -25,45 +25,45 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <div className="min-h-screen bg-white text-slate-900 pb-24 md:pb-20">
       
       {/* Header Banner */}
-      <section className="bg-[#0A5C4F] text-white py-12 px-4 sm:px-6 lg:px-12">
+      <section className="bg-slate-900 text-white py-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <Breadcrumb
             items={[
-              { label: 'Home', href: '/' },
+              { label: 'Feed', href: '/' },
               { label: 'New Projects', href: '/projects' },
             ]}
           />
           <div className="mt-4 max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold uppercase tracking-wider mb-3 border border-white/20">
-              <Building2 className="w-3.5 h-3.5 text-[#FF6B35]" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold uppercase tracking-wider mb-2 border border-white/20">
+              <Building2 className="w-3.5 h-3.5 text-indigo-400" />
               <span>Dubai Off-Plan Developments</span>
             </span>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2">
-              New Projects in Dubai
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-white mb-2">
+              New Projects
             </h1>
-            <p className="text-sm text-emerald-100">
-              Explore off-plan residences and luxury master communities directly with licensed developer sales channels.
+            <p className="text-xs sm:text-sm text-slate-300">
+              Explore pre-construction releases from premier UAE developers with flexible payment schedules.
             </p>
           </div>
         </div>
       </section>
 
       {/* Filter Tabs & Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 mt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
         
         {/* Developer Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-4 mb-6">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-4 mb-4">
           {developers.map((dev) => (
             <button
               key={dev}
               onClick={() => setSelectedDeveloper(dev)}
-              className={`tap-target px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all whitespace-nowrap cursor-pointer ${
+              className={`tap-target px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition-all whitespace-nowrap cursor-pointer ${
                 selectedDeveloper === dev
-                  ? 'bg-[#0A5C4F] text-white shadow-xs'
-                  : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                  ? 'bg-slate-900 text-white shadow-xs font-bold'
+                  : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
               }`}
             >
               {dev}
@@ -71,69 +71,55 @@ export default function ProjectsPage() {
           ))}
         </div>
 
-        {/* Projects Grid */}
+        {/* Projects Grid with App-like aesthetic */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+              className="flex flex-col justify-between group"
             >
-              {/* Thumbnail */}
-              <div className="relative w-full aspect-[4/3] bg-slate-200 overflow-hidden">
+              {/* Thumbnail with rounded-3xl */}
+              <div className="relative w-full aspect-[4/3] rounded-3xl bg-slate-100 overflow-hidden shadow-xs group-hover:shadow-md transition-all">
                 <img
                   src={project.image}
                   alt={project.name}
-                  className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                 />
-                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 text-slate-900 text-[10px] font-bold uppercase shadow-xs">
+                <span className="absolute top-3.5 left-3.5 px-3.5 py-1 rounded-full bg-black/45 backdrop-blur-md text-white text-[11px] font-semibold">
                   {project.badge}
                 </span>
               </div>
 
               {/* Body */}
-              <div className="p-5 flex flex-col flex-1 justify-between">
+              <div className="mt-3 px-1 flex flex-col flex-1 justify-between">
                 <div>
-                  <span className="text-xs font-semibold text-[#0A5C4F] uppercase tracking-wider block mb-1">
-                    {project.developer}
-                  </span>
-                  <h2 className="text-lg font-bold text-slate-900 group-hover:text-[#0A5C4F] transition-colors leading-snug">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
+                    <span>{project.developer}</span>
+                    <span className="text-indigo-600 font-semibold">{project.handoverDate}</span>
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mt-0.5 leading-snug">
                     {project.name}
                   </h2>
-                  <p className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 mb-3">
+                  <span className="text-lg font-bold text-slate-900 block mt-0.5">
+                    From {formatAED(project.startingPrice)}
+                  </span>
+                  <p className="flex items-center gap-1.5 text-xs text-slate-500 mt-1 mb-2">
                     <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <span>{project.location}, Dubai</span>
                   </p>
                   <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
                     {project.description}
                   </p>
-
-                  {/* Spec box */}
-                  <div className="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs space-y-2 mb-4">
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-slate-500 text-[11px]">Starting from</span>
-                      <span className="text-[#0A5C4F] font-bold text-sm">
-                        {formatAED(project.startingPrice)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-slate-600 text-[11px]">
-                      <span>Handover Date</span>
-                      <span className="font-semibold text-slate-800">{project.handoverDate}</span>
-                    </div>
-                    <div className="flex justify-between text-slate-600 text-[11px]">
-                      <span>Payment Plan</span>
-                      <span className="font-semibold text-slate-800">{project.paymentPlan}</span>
-                    </div>
-                  </div>
                 </div>
 
                 {/* CTAs */}
-                <div className="flex items-center gap-2 pt-2">
+                <div className="flex items-center gap-2 pt-1">
                   <button
                     type="button"
                     onClick={() => handleOpenLead(project)}
-                    className="tap-target flex-1 py-2.5 px-3 rounded-lg bg-[#E6F2F0] hover:bg-[#D5EBE8] text-[#0A5C4F] font-bold text-xs tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="tap-target flex-1 py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-98"
                   >
-                    <MessageCircle className="w-4 h-4 text-[#0A5C4F]" />
+                    <MessageCircle className="w-4 h-4 text-indigo-300" />
                     <span>Register Interest</span>
                   </button>
 
@@ -141,7 +127,7 @@ export default function ProjectsPage() {
                     href="https://wa.me/971501182342"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="tap-target px-3 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center"
+                    className="tap-target px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center"
                     aria-label="Direct WhatsApp"
                   >
                     WhatsApp
@@ -157,7 +143,7 @@ export default function ProjectsPage() {
       {/* Lead Form Modal */}
       {leadModalOpen && activeProject && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-fadeIn">
-          <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl p-6 max-h-[90vh] overflow-y-auto">
             <button
               type="button"
               onClick={() => setLeadModalOpen(false)}
@@ -166,7 +152,7 @@ export default function ProjectsPage() {
               ✕
             </button>
             <div className="mb-4">
-              <span className="text-xs font-bold text-[#0A5C4F] uppercase tracking-wider">
+              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
                 Direct Developer Registration
               </span>
               <h3 className="text-xl font-bold text-slate-900 mt-1">
@@ -191,4 +177,3 @@ export default function ProjectsPage() {
     </div>
   );
 }
-
