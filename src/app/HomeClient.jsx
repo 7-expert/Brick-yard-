@@ -2,13 +2,29 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Search, ChevronRight, SlidersHorizontal, MapPin, Sparkles, Building2, MessageCircle } from 'lucide-react';
+import {
+  Search,
+  ChevronRight,
+  ChevronLeft,
+  MapPin,
+  Map as MapIcon,
+  Star,
+  SlidersHorizontal,
+  ChevronDown,
+  Sparkles,
+  Building2,
+  Gem,
+  Compass,
+  Users,
+  Compass as JourneyIcon,
+} from 'lucide-react';
 import ListingCard from '@/components/ui/ListingCard';
 import LeadForm from '@/components/ui/LeadForm';
 import {
   DUBAI_PROPERTIES,
   DUBAI_PROJECTS,
   DUBAI_AREA_GUIDES,
+  PROPERTY_TYPES,
 } from '@/data/dubaiProperties';
 import { formatAED } from '@/lib/tokens';
 
@@ -16,7 +32,38 @@ export default function HomeClient() {
   const [activeCategory, setActiveCategory] = useState('Houses');
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+
+  // SearchBar state (matching Image 2)
+  const [purpose, setPurpose] = useState('sale'); // 'sale' | 'rent'
+  const [status, setStatus] = useState('all'); // 'all' | 'ready' | 'off-plan'
+  const [locationInput, setLocationInput] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  const [beds, setBeds] = useState('');
+  const [priceMax, setPriceMax] = useState('');
+
+  // Testimonial slide state (matching Image 3)
+  const [currentTestimonialIdx, setCurrentTestimonialIdx] = useState(0);
+
+  const testimonials = [
+    {
+      quote: "The team guided us through every detail with professionalism and transparency. We always felt informed, supported, and confident in our decision.",
+      author: "Emily R.",
+      role: "Business Consultant",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+    },
+    {
+      quote: "Found our dream waterfront penthouse on Palm Jumeirah in under two weeks. The market valuation data and direct developer access were second to none.",
+      author: "Alexander M.",
+      role: "Private Equity Partner",
+      avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=200&q=80",
+    },
+    {
+      quote: "Exceptional advisory on off-plan releases with guaranteed payment plans. Truly a modern and transparent real estate experience.",
+      author: "Sophie D.",
+      role: "International Investor",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80",
+    },
+  ];
 
   const categories = [
     { key: 'Houses', label: 'Houses', type: 'Villa' },
@@ -26,7 +73,6 @@ export default function HomeClient() {
     { key: 'Commercial', label: 'Commercial', type: 'Commercial' },
   ];
 
-  // Filter listings
   const filteredCategoryListings = DUBAI_PROPERTIES.filter((p) => {
     const matchedCategory = categories.find((c) => c.key === activeCategory);
     if (!matchedCategory || activeCategory === 'Houses') return true;
@@ -36,15 +82,27 @@ export default function HomeClient() {
   const homeForYou = filteredCategoryListings.slice(0, 6);
   const homeNearby = DUBAI_PROPERTIES.filter((p) => p.purpose === 'rent').slice(0, 6);
 
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    const params = new URLSearchParams();
+    if (purpose) params.set('purpose', purpose);
+    if (status !== 'all') params.set('status', status);
+    if (locationInput.trim()) params.set('location', locationInput.trim());
+    if (propertyType) params.set('type', propertyType);
+    if (beds) params.set('beds', beds);
+    if (priceMax) params.set('priceMax', priceMax);
+    window.location.href = `/listings?${params.toString()}`;
+  };
+
   const openProjectModal = (proj) => {
     setSelectedProject(proj);
     setLeadModalOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-24 md:pb-16">
+    <div className="min-h-screen bg-white text-slate-900 pb-24 md:pb-16 font-sans">
       
-      {/* 1. TOP CATEGORY PILLS BAR (Exact Match to User Reference Screenshot) */}
+      {/* 1. TOP CATEGORY PILLS BAR (Exact Reference Screenshot) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
           {categories.map((cat) => {
@@ -67,39 +125,155 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* QUICK INLINE SEARCH STRIP */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (searchQuery.trim()) {
-              window.location.href = `/listings?location=${encodeURIComponent(searchQuery.trim())}`;
-            }
-          }}
-          className="relative flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-3.5 py-2.5 focus-within:bg-white focus-within:border-slate-400 focus-within:ring-2 focus-within:ring-slate-200 transition-all"
-        >
-          <Search className="w-4 h-4 text-slate-400 shrink-0 mr-2.5" />
-          <input
-            type="text"
-            placeholder="Search location, community or development..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 font-medium"
-          />
-          <Link
-            href="/listings"
-            className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 shrink-0 ml-2 flex items-center gap-1"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Filters</span>
-          </Link>
-        </form>
+      {/* 2. SEARCH BAR CONSOLE WITH MAP OPTION (Exact Image 2 Layout) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
+          <form onSubmit={handleSearchSubmit} className="space-y-3">
+            
+            {/* ROW 1: Buy / Rent Toggle + Location Input + Map Button + Search Button */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+              
+              {/* Buy / Rent Toggle (Matching Image 2) */}
+              <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl shrink-0 self-start sm:self-auto">
+                <button
+                  type="button"
+                  onClick={() => setPurpose('sale')}
+                  className={`tap-target px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                    purpose === 'sale'
+                      ? 'bg-[#E6F2F0] text-[#0A5C4F] shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Buy
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPurpose('rent')}
+                  className={`tap-target px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                    purpose === 'rent'
+                      ? 'bg-[#E6F2F0] text-[#0A5C4F] shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  Rent
+                </button>
+              </div>
+
+              {/* Location Input with Map Pin Icon */}
+              <div className="relative flex-1">
+                <div className="flex items-center bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#0A5C4F] focus-within:ring-2 focus-within:ring-[#0A5C4F]/15 transition-all">
+                  <MapPin className="w-4 h-4 text-[#0A5C4F] shrink-0 mr-2.5" />
+                  <input
+                    type="text"
+                    placeholder="Enter location, community or building..."
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 font-medium"
+                  />
+                </div>
+              </div>
+
+              {/* Map View Toggle Option (Fix map section in hero requested by user) */}
+              <Link
+                href="/listings?view=map"
+                className="tap-target px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors shrink-0"
+              >
+                <MapIcon className="w-4 h-4 text-[#0A5C4F]" />
+                <span>Map</span>
+              </Link>
+
+              {/* Green Search Button (Exact Image 2) */}
+              <button
+                type="submit"
+                className="tap-target px-6 py-2.5 bg-[#0A5C4F] hover:bg-[#08493F] text-white font-bold text-xs sm:text-sm tracking-wide rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98 shrink-0"
+              >
+                <Search className="w-4 h-4" />
+                <span>Search</span>
+              </button>
+
+            </div>
+
+            {/* ROW 2: All / Ready / Off-Plan + Residential + Beds & Baths + Price (AED) (Exact Image 2) */}
+            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+              
+              {/* All / Ready / Off-Plan Toggle */}
+              <div className="inline-flex items-center bg-slate-100 p-0.5 rounded-lg shrink-0">
+                {['all', 'ready', 'off-plan'].map((st) => (
+                  <button
+                    key={st}
+                    type="button"
+                    onClick={() => setStatus(st)}
+                    className={`tap-target px-3 py-1.5 rounded-md text-[11px] font-semibold capitalize transition-all cursor-pointer ${
+                      status === st
+                        ? 'bg-[#E6F2F0] text-[#0A5C4F] shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {st === 'all' ? 'All' : st === 'ready' ? 'Ready' : 'Off-Plan'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Residential Dropdown */}
+              <div className="relative flex-1 min-w-[120px]">
+                <select
+                  value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                  className="tap-target w-full appearance-none px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:border-[#0A5C4F] outline-none cursor-pointer pr-7"
+                >
+                  <option value="">Residential</option>
+                  {PROPERTY_TYPES.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+
+              {/* Beds & Baths Dropdown */}
+              <div className="relative flex-1 min-w-[110px]">
+                <select
+                  value={beds}
+                  onChange={(e) => setBeds(e.target.value)}
+                  className="tap-target w-full appearance-none px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:border-[#0A5C4F] outline-none cursor-pointer pr-7"
+                >
+                  <option value="">Beds & Baths</option>
+                  <option value="studio">Studio</option>
+                  <option value="1">1 Bed</option>
+                  <option value="2">2 Beds</option>
+                  <option value="3">3 Beds</option>
+                  <option value="4">4 Beds</option>
+                  <option value="5">5+ Beds</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+
+              {/* Price (AED) Dropdown */}
+              <div className="relative flex-1 min-w-[120px]">
+                <select
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(e.target.value)}
+                  className="tap-target w-full appearance-none px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:border-[#0A5C4F] outline-none cursor-pointer pr-7"
+                >
+                  <option value="">Price (AED)</option>
+                  <option value="1000000">Up to AED 1M</option>
+                  <option value="2000000">Up to AED 2M</option>
+                  <option value="5000000">Up to AED 5M</option>
+                  <option value="10000000">Up to AED 10M</option>
+                  <option value="25000000">Up to AED 25M+</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+
+            </div>
+
+          </form>
+        </div>
       </section>
 
-      {/* 2. SECTION 1: "Home For You" (Exact Reference Layout) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-        
-        {/* Section Header */}
+      {/* 3. SECTION: "Home For You" (Feed Carousel) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
             Home For You
@@ -112,7 +286,7 @@ export default function HomeClient() {
           </Link>
         </div>
 
-        {/* Card Track: Horizontal Swipe with snap on Mobile, Grid on Desktop */}
+        {/* Horizontal Snap Track on Mobile, Grid on Desktop */}
         <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
           {homeForYou.map((property) => (
             <div key={property.id} className="snap-start shrink-0">
@@ -120,13 +294,10 @@ export default function HomeClient() {
             </div>
           ))}
         </div>
-
       </section>
 
-      {/* 3. SECTION 2: "Home Nearby" (Exact Reference Layout) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-        
-        {/* Section Header */}
+      {/* 4. SECTION: "Home Nearby" (Rental Feed) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
             Home Nearby
@@ -139,7 +310,6 @@ export default function HomeClient() {
           </Link>
         </div>
 
-        {/* Card Track */}
         <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
           {homeNearby.map((property) => (
             <div key={property.id} className="snap-start shrink-0">
@@ -147,11 +317,208 @@ export default function HomeClient() {
             </div>
           ))}
         </div>
-
       </section>
 
-      {/* 4. SECTION 3: "New Projects" (Curated Developments in UAE) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
+      {/* 5. EDITORIAL "ABOUT US" SECTION (Exact Content & Layout of Image 3 Top Block) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 border-t border-slate-100">
+        <div className="max-w-3xl mx-auto text-center mb-12">
+          {/* Terracotta/Orange Pill Eyebrow */}
+          <span className="text-xs font-bold uppercase tracking-wider text-[#FF6B35] block mb-3">
+            about us
+          </span>
+          {/* Main Editorial Statement */}
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight leading-snug mb-4">
+            A home is more than an address. It is the setting for your ambitions, the backdrop to your everyday life, and an investment in what comes next.
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl mx-auto">
+            At Brickyard, we bring together distinctive properties and a more considered way to discover them — with thoughtful curation, local insight, and a personal approach.
+          </p>
+        </div>
+
+        {/* 4 Feature Pillars (Exact 4 items from Image 3) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center sm:text-left">
+          
+          {/* Pillar 1: Curated Excellence */}
+          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#FF6B35] flex items-center justify-center mb-4 mx-auto sm:mx-0">
+                <Gem className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-base text-slate-900 mb-2">
+                Curated Excellence
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Discover distinctive homes selected for their architecture, quality, and character.
+              </p>
+            </div>
+          </div>
+
+          {/* Pillar 2: Prime Locations */}
+          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#0A5C4F] flex items-center justify-center mb-4 mx-auto sm:mx-0">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-base text-slate-900 mb-2">
+                Prime Locations
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Explore sought-after neighborhoods and exceptional addresses worth discovering.
+              </p>
+            </div>
+          </div>
+
+          {/* Pillar 3: Personal Guidance */}
+          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-4 mx-auto sm:mx-0">
+                <Users className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-base text-slate-900 mb-2">
+                Personal Guidance
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Get tailored support to help you make confident, informed property decisions.
+              </p>
+            </div>
+          </div>
+
+          {/* Pillar 4: A Seamless Journey */}
+          <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col justify-between">
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 mx-auto sm:mx-0">
+                <Compass className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-base text-slate-900 mb-2">
+                A Seamless Journey
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Move from discovery to your next chapter with a clear, thoughtfully guided process.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 6. TESTIMONIAL & SOCIAL PROOF SECTION (Exact Content & Layout of Image 3 Bottom Block) */}
+      <section className="bg-slate-50/80 py-14 sm:py-20 border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* Header Row: Title on Left, Stats on Right (Exact Image 3 Layout) */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-[#FF6B35] block mb-2">
+                testimonial
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight">
+                Stories behind <span className="font-serif italic font-normal">extraordinary homes</span>
+              </h2>
+            </div>
+
+            {/* 3 Stats Columns (Exact Image 3 Numbers) */}
+            <div className="grid grid-cols-3 gap-6 sm:gap-10 border-t sm:border-t-0 pt-4 sm:pt-0 border-slate-200">
+              <div>
+                <span className="text-2xl sm:text-3xl font-bold text-[#FF6B35] block tracking-tight">850+</span>
+                <span className="text-xs text-slate-500 font-medium">Verified Reviews</span>
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-bold text-[#0A5C4F] block tracking-tight">24+</span>
+                <span className="text-xs text-slate-500 font-medium">Global Destinations</span>
+              </div>
+              <div>
+                <span className="text-2xl sm:text-3xl font-bold text-slate-900 block tracking-tight">2.5K+</span>
+                <span className="text-xs text-slate-500 font-medium">Successful Transactions</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Testimonial Showcase Box (Exact Image 3 Split Architecture) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            
+            {/* Left Col: Villa Photo with Customer Satisfaction Pill Overlay (5 cols) */}
+            <div className="lg:col-span-5 relative rounded-3xl overflow-hidden shadow-sm min-h-[300px] lg:min-h-[380px] bg-slate-900">
+              <img
+                src="/waterfront_villa_1790348391865.jpg"
+                alt="Extraordinary Home"
+                className="w-full h-full object-cover"
+              />
+              {/* White Overlay Pill in Bottom-Left */}
+              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-md flex items-center gap-3">
+                <div className="flex -space-x-1.5">
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=80&q=80" alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=80&q=80" alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-500 block leading-none">Customer Satisfaction</span>
+                  <span className="text-xs font-bold text-slate-900">⭐ 4.9/5</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Col: White Testimonial Card with 5 Stars, Quote, Author & Carousel Controls (7 cols) */}
+            <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 shadow-xs flex flex-col justify-between">
+              <div>
+                {/* 5 Gold Stars */}
+                <div className="flex items-center gap-1 text-amber-500 mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+
+                {/* Quote */}
+                <blockquote className="text-base sm:text-xl text-slate-800 font-medium leading-relaxed mb-8">
+                  "{testimonials[currentTestimonialIdx].quote}"
+                </blockquote>
+
+                {/* Author Avatar & Role */}
+                <div className="flex items-center gap-3">
+                  <img
+                    src={testimonials[currentTestimonialIdx].avatar}
+                    alt={testimonials[currentTestimonialIdx].author}
+                    className="w-11 h-11 rounded-full object-cover border border-slate-200"
+                  />
+                  <div>
+                    <span className="font-bold text-sm text-slate-900 block">
+                      {testimonials[currentTestimonialIdx].author}
+                    </span>
+                    <span className="text-xs text-slate-500">
+                      {testimonials[currentTestimonialIdx].role}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Prev / Next Carousel Buttons (Bottom Right, matching Image 3) */}
+              <div className="flex items-center justify-end gap-2 pt-6 mt-6 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setCurrentTestimonialIdx((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
+                  aria-label="Previous testimonial"
+                  className="w-10 h-10 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCurrentTestimonialIdx((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))}
+                  aria-label="Next testimonial"
+                  className="w-10 h-10 rounded-full bg-[#FF6B35] hover:bg-[#e85522] text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* 7. POPULAR NEW DEVELOPMENTS RAIL */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
             Popular New Projects
@@ -198,46 +565,6 @@ export default function HomeClient() {
                 </p>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. POPULAR COMMUNITIES RAIL */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Explore Neighborhoods
-          </h2>
-          <Link
-            href="/areas"
-            className="text-xs sm:text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
-          >
-            See all
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {DUBAI_AREA_GUIDES.map((area) => (
-            <Link
-              key={area.slug}
-              href={`/areas/${area.slug}`}
-              className="relative aspect-[4/3] rounded-2xl overflow-hidden group shadow-xs hover:shadow-md transition-all"
-            >
-              <img
-                src={area.heroImage}
-                alt={area.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3 text-white">
-                <span className="text-[10px] font-bold text-emerald-300 block">
-                  ROI: {area.roi}
-                </span>
-                <h4 className="text-sm font-bold truncate leading-tight">
-                  {area.name}
-                </h4>
-              </div>
-            </Link>
           ))}
         </div>
       </section>

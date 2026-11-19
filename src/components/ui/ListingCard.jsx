@@ -44,7 +44,7 @@ export default function ListingCard({ property, className = '' }) {
     <article className={`group flex flex-col shrink-0 w-[290px] sm:w-auto transition-all ${className}`}>
       {/* 1. Large Rounded Image Container (Matching Reference) */}
       <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-slate-100 shadow-xs group-hover:shadow-md transition-all duration-300">
-        <Link href={`/listings/${property.id}`} className="block w-full h-full">
+        <Link href={`/listings/${property.id}`} className="block w-full h-full cursor-pointer">
           <img
             src={images[currentImageIdx]}
             alt={property.title}
@@ -75,40 +75,41 @@ export default function ListingCard({ property, className = '' }) {
         </button>
       </div>
 
-      {/* 2. Specs Row (Bath, Bed, Sqft) - Exact Reference Layout */}
-      <div className="flex items-center gap-4 text-xs text-slate-600 font-medium mt-3 px-1">
-        <span className="inline-flex items-center gap-1.5">
-          <Bath className="w-4 h-4 text-slate-400 shrink-0" />
-          <span>{property.baths} baths</span>
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <Bed className="w-4 h-4 text-slate-400 shrink-0" />
-          <span>{property.beds} beds</span>
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <Square className="w-4 h-4 text-slate-400 shrink-0" />
-          <span>{formatNumber(property.sqft)} sqft</span>
-        </span>
-      </div>
+      {/* 2. Specs Row + Price + Address wrapped in clickable link to open full detail page */}
+      <Link href={`/listings/${property.id}`} className="block cursor-pointer">
+        {/* Specs Row (Bath, Bed, Sqft) - Exact Reference Layout */}
+        <div className="flex items-center gap-4 text-xs text-slate-600 font-medium mt-3 px-1">
+          <span className="inline-flex items-center gap-1.5">
+            <Bath className="w-4 h-4 text-slate-400 shrink-0" />
+            <span>{property.baths} baths</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Bed className="w-4 h-4 text-slate-400 shrink-0" />
+            <span>{property.beds} beds</span>
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <Square className="w-4 h-4 text-slate-400 shrink-0" />
+            <span>{formatNumber(property.sqft)} sqft</span>
+          </span>
+        </div>
 
-      {/* 3. Bold Price Tag */}
-      <div className="mt-1 px-1">
-        <Link href={`/listings/${property.id}`} className="block">
+        {/* Bold Price Tag */}
+        <div className="mt-1 px-1">
           <span className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 group-hover:text-[#0A5C4F] transition-colors">
             {property.priceAED ? formatAED(property.priceAED) : property.price}
           </span>
           {property.purpose === 'rent' && (
             <span className="text-xs text-slate-500 font-normal ml-1">/year</span>
           )}
-        </Link>
-      </div>
+        </div>
 
-      {/* 4. Address & Title Line */}
-      <div className="mt-0.5 px-1">
-        <p className="text-xs sm:text-sm text-slate-500 truncate font-normal">
-          {property.address || property.location || '10 Tranquility Way, Downtown Dubai, UAE'}
-        </p>
-      </div>
+        {/* Address & Title Line */}
+        <div className="mt-0.5 px-1">
+          <p className="text-xs sm:text-sm text-slate-500 truncate font-normal group-hover:text-slate-800 transition-colors">
+            {property.address || property.location || '10 Tranquility Way, Downtown Dubai, UAE'}
+          </p>
+        </div>
+      </Link>
     </article>
   );
 }

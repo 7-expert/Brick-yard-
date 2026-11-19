@@ -545,6 +545,15 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
                           onClick={(e) => e.stopPropagation()}
                         >
                           <div className="flex items-center justify-end gap-2">
+                            <a
+                              href={`/listings/${booking.property_id || 'prop-1'}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-1.5 text-ink-soft hover:text-emerald-700 hover:bg-emerald-50 rounded transition-colors"
+                              title="Open Full Property Detail Page"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
                             <button
                               onClick={() => openDrawer(booking)}
                               className="p-1.5 text-ink-soft hover:text-gold-600 hover:bg-gold-50 rounded transition-colors"
@@ -645,19 +654,31 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
 
             {/* Drawer Content */}
             <div className="p-6 space-y-6 flex-grow font-sans">
-              {/* Status Selector */}
-              <div className="bg-[#FAF8F5] p-4 rounded-xl border border-cream-dark flex items-center justify-between">
-                <span className="text-xs uppercase tracking-wider text-ink-soft font-bold">Status</span>
-                <select
-                  value={selectedBooking.status}
-                  onChange={(e) => handleStatusChange(selectedBooking.id, e.target.value)}
-                  className="text-sm font-semibold rounded-md border border-gold-300 bg-white py-1.5 px-3 focus:outline-none focus:border-gold-500 shadow-xs"
+              {/* Status Selector & Open Detail Page Action */}
+              <div className="bg-[#FAF8F5] p-4 rounded-xl border border-cream-dark flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs uppercase tracking-wider text-ink-soft font-bold">Status</span>
+                  <select
+                    value={selectedBooking.status}
+                    onChange={(e) => handleStatusChange(selectedBooking.id, e.target.value)}
+                    className="text-sm font-semibold rounded-md border border-gold-300 bg-white py-1.5 px-3 focus:outline-none focus:border-gold-500 shadow-xs"
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+
+                <a
+                  href={`/listings/${selectedBooking.property_id || 'prop-1'}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg bg-[#0A5C4F] hover:bg-[#08493F] text-white text-xs font-semibold shadow-xs transition-colors"
                 >
-                  <option value="pending">Pending</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
+                  <span>Open Full Detail Page</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
 
               {/* Customer Contact */}
