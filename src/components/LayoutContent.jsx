@@ -17,11 +17,11 @@ export default function LayoutContent({ children }) {
       </Suspense>
 
       {isAdmin ? (
-        <main className="flex-grow">{children}</main>
+        <main suppressHydrationWarning className="flex-grow">{children}</main>
       ) : (
         <>
           <Navigation />
-          <main className="flex-grow">{children}</main>
+          <main suppressHydrationWarning className="flex-grow">{children}</main>
           <Footer />
         </>
       )}

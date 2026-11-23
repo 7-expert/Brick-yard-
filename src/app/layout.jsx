@@ -26,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jakarta.variable}`}>
       <body suppressHydrationWarning className="antialiased min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
         <LayoutContent>
           {children}
