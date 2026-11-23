@@ -1,62 +1,91 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { DUBAI_PROPERTIES } from '@/data/dubaiProperties';
+import { saveAnalyticsEvent, getAnalyticsEvents, getBookings } from '@/lib/serverStore';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request) {
   try {
-    const event = await request.json();
-    const supabase = await createClient();
+    let event = null;
+    const contentType = request.headers.get('content-type') || '';
 
-    // Insert into Supabase analytics_events table if configured
-    await supabase
-      .from('analytics_events')
-      .insert([
-        {
-          event_type: event.eventType || 'impression',
-          event_name: event.eventName || 'page_view',
-          page_path: event.pagePath || '/',
-          device: event.device || 'desktop',
-          property_id: event.propertyId || null,
-          property_title: event.propertyTitle || null,
-          metadata: event,
-        },
-      ])
-      .select()
-      .maybeSingle();
+    if (contentType.includes('application/json')) {
+      event = await request.json();
+    } else {
+      const text = await request.text();
+      try {
+        event = JSON.parse(text);
+      } catch (e) {
+        event = null;
+      }
+    }
+
+    if (!event || (!event.eventType && !event.event_type && !event.eventName && !event.event_name)) {
+      return NextResponse.json({ success: true });
+    }
+
+    // 1. Guaranteed storage in server store (works in all environments & private windows)
+    saveAnalyticsEvent(event);
+
+    // 2. Also try inserting into Supabase analytics_events table if configured
+    try {
+      const supabase = await createClient();
+      await supabase
+        .from('analytics_events')
+        .insert([
+          {
+            event_type: event.eventType || event.event_type || 'impression',
+            event_name: event.eventName || event.event_name || 'page_view',
+            page_path: event.pagePath || event.page_path || '/',
+            device: event.device || 'desktop',
+            property_id: event.propertyId || event.property_id || null,
+            property_title: event.propertyTitle || event.property_title || null,
+            metadata: event.metadata || event,
+          },
+        ]);
+    } catch (supabaseErr) {
+      // Supabase unconfigured or offline, serverStore holds the real data
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    // Graceful return 200 so client analytics never fail user requests
     return NextResponse.json({ success: true, fallback: true });
   }
 }
 
 export async function GET(request) {
   try {
-    const supabase = await createClient();
-
-    // 1. Fetch Real True Leads strictly from Supabase bookings table
-    let trueLeadsList = [];
+    // 1. Fetch Real True Leads from Supabase + serverStore
+    let supabaseBookings = [];
     try {
+      const supabase = await createClient();
       const { data: realBookings } = await supabase
         .from('bookings')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (realBookings) {
-        trueLeadsList = realBookings;
+        supabaseBookings = realBookings;
       }
-    } catch (e) {
-      trueLeadsList = [];
-    }
+    } catch (e) {}
 
+    const localBookings = getBookings();
+    const trueLeadsList = [...supabaseBookings];
+
+    localBookings.forEach((lb) => {
+      if (!trueLeadsList.some((b) => b.id === lb.id || (b.phone === lb.phone && b.created_at === lb.created_at))) {
+        trueLeadsList.push(lb);
+      }
+    });
+
+    trueLeadsList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     const trueLeadsCount = trueLeadsList.length;
 
-    // 2. Fetch Real recorded events strictly from analytics_events table
-    let recordedEvents = [];
+    // 2. Fetch Real recorded events from Supabase + serverStore
+    let supabaseEvents = [];
     try {
+      const supabase = await createClient();
       const { data: events } = await supabase
         .from('analytics_events')
         .select('*')
@@ -64,13 +93,22 @@ export async function GET(request) {
         .limit(1000);
 
       if (events) {
-        recordedEvents = events;
+        supabaseEvents = events;
       }
-    } catch (e) {
-      recordedEvents = [];
-    }
+    } catch (e) {}
 
-    // Strictly real recorded counts - NO mock baselines, NO fake multipliers
+    const localEvents = getAnalyticsEvents();
+    const recordedEvents = [...supabaseEvents];
+
+    localEvents.forEach((le) => {
+      if (!recordedEvents.some((e) => e.id === le.id)) {
+        recordedEvents.push(le);
+      }
+    });
+
+    recordedEvents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+    // Strictly real counts
     const impressionsList = recordedEvents.filter((e) => e.event_type === 'impression');
     const clicksList = recordedEvents.filter((e) => e.event_type === 'click');
 
@@ -87,11 +125,20 @@ export async function GET(request) {
 
     // Real click category breakdown strictly from real click events
     const clicksBreakdown = {
-      whatsapp: clicksList.filter((e) => e.event_name?.includes('whatsapp')).length,
-      phoneCalls: clicksList.filter((e) => e.event_name?.includes('call') || e.event_name?.includes('phone')).length,
-      propertyViews: clicksList.filter((e) => e.event_name?.includes('property') || e.event_name?.includes('view')).length,
-      videoRequests: clicksList.filter((e) => e.event_name?.includes('video') || e.event_name?.includes('tour')).length,
-      mapSearches: clicksList.filter((e) => e.event_name?.includes('map')).length,
+      whatsapp: clicksList.filter((e) => (e.event_name || '').toLowerCase().includes('whatsapp')).length,
+      phoneCalls: clicksList.filter((e) => {
+        const n = (e.event_name || '').toLowerCase();
+        return n.includes('call') || n.includes('phone');
+      }).length,
+      propertyViews: clicksList.filter((e) => {
+        const n = (e.event_name || '').toLowerCase();
+        return n.includes('property') || n.includes('view') || n.includes('detail');
+      }).length,
+      videoRequests: clicksList.filter((e) => {
+        const n = (e.event_name || '').toLowerCase();
+        return n.includes('video') || n.includes('tour');
+      }).length,
+      mapSearches: clicksList.filter((e) => (e.event_name || '').toLowerCase().includes('map')).length,
     };
 
     // Real 7-day time series data strictly calculated from actual events and bookings
@@ -153,12 +200,13 @@ export async function GET(request) {
       }
     });
 
-    // Generate real top properties list
     let topProperties = Object.values(propertyEngagementMap)
       .sort((a, b) => (b.leads * 10 + b.clicks * 2 + b.impressions) - (a.leads * 10 + a.clicks * 2 + a.impressions))
       .slice(0, 6)
       .map((item) => {
-        const matched = DUBAI_PROPERTIES.find((p) => p.title.toLowerCase() === item.title.toLowerCase() || p.id === item.id);
+        const matched = DUBAI_PROPERTIES.find(
+          (p) => p.title.toLowerCase() === item.title.toLowerCase() || p.id === item.id
+        );
         const ctrVal = item.impressions > 0 ? ((item.clicks / item.impressions) * 100).toFixed(1) : '0.0';
         return {
           id: item.id,

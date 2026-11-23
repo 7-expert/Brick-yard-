@@ -24,8 +24,8 @@ export async function trackEvent(eventType, eventName, metadata = {}) {
   if (typeof window === 'undefined') return;
 
   const eventPayload = {
-    eventType, // 'impression' | 'click' | 'lead'
-    eventName, // e.g. 'page_view', 'whatsapp_click', 'call_click', 'property_card_click', 'booking_submitted'
+    eventType,
+    eventName,
     pagePath: window.location.pathname + window.location.search,
     device: getDeviceType(),
     timestamp: new Date().toISOString(),
@@ -33,27 +33,22 @@ export async function trackEvent(eventType, eventName, metadata = {}) {
     ...metadata,
   };
 
-  // 1. Store locally for instant UI reflection & offline resilience
+  // 1. Dispatch directly to backend API (reliable across private windows & ad-blockers)
   try {
-    const existing = JSON.parse(localStorage.getItem('brickyard_analytics_events') || '[]');
-    const updated = [eventPayload, ...existing].slice(0, 100); // keep last 100
-    localStorage.setItem('brickyard_analytics_events', JSON.stringify(updated));
-    window.dispatchEvent(new CustomEvent('brickyard_analytics_updated', { detail: eventPayload }));
+    fetch('/api/analytics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(eventPayload),
+      keepalive: true,
+    }).catch(() => {});
   } catch (e) {}
 
-  // 2. Dispatch to backend API
+  // 2. Also keep in client-side cache for instant local reflection
   try {
-    if (navigator.sendBeacon) {
-      const blob = new Blob([JSON.stringify(eventPayload)], { type: 'application/json' });
-      navigator.sendBeacon('/api/analytics', blob);
-    } else {
-      fetch('/api/analytics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(eventPayload),
-        keepalive: true,
-      }).catch(() => {});
-    }
+    const existing = JSON.parse(localStorage.getItem('brickyard_analytics_events') || '[]');
+    const updated = [eventPayload, ...existing].slice(0, 100);
+    localStorage.setItem('brickyard_analytics_events', JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent('brickyard_analytics_updated', { detail: eventPayload }));
   } catch (e) {}
 }
 
@@ -75,4 +70,3 @@ export function trackClick(actionName, targetName, metadata = {}) {
 export function trackLeadSubmission(leadDetails = {}) {
   trackEvent('lead', 'booking_submitted', leadDetails);
 }
-

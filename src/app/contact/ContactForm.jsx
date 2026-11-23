@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { trackLeadSubmission } from '@/lib/analytics';
 
 export default function ContactForm() {
   const [firstName, setFirstName] = useState('');
@@ -43,6 +44,11 @@ export default function ContactForm() {
       } else {
         setIsError(false);
         setStatusMessage(data.message || 'Thank you! Your inquiry has been submitted.');
+        trackLeadSubmission({
+          fullName: `${firstName} ${lastName}`.trim(),
+          phone,
+          inquiryType,
+        });
         setFirstName('');
         setLastName('');
         setEmail('');

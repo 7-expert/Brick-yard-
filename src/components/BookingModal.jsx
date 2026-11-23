@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackLeadSubmission } from '@/lib/analytics';
 
 export default function BookingModal({ isOpen, onClose, defaultItemTitle = '', defaultType = 'General Inquiry' }) {
   const [fullName, setFullName] = useState('');
@@ -45,6 +46,11 @@ export default function BookingModal({ isOpen, onClose, defaultItemTitle = '', d
       } else {
         setIsError(false);
         setStatusMessage(data.message || 'Thank you! Your request has been received.');
+        trackLeadSubmission({
+          fullName,
+          phone,
+          propertyTitle: defaultItemTitle,
+        });
         setTimeout(() => {
           onClose();
           setStatusMessage(null);

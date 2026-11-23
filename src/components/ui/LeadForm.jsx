@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { trackLeadSubmission } from '@/lib/analytics';
 
 export default function LeadForm({
   propertyTitle = 'General Inquiry',
@@ -70,6 +71,12 @@ export default function LeadForm({
         setErrorMessage(data.error || 'Submission failed. Please check your details.');
       } else {
         setStatus('success');
+        trackLeadSubmission({
+          fullName,
+          phone: fullPhone,
+          propertyTitle,
+          inquiryType,
+        });
       }
     } catch (err) {
       setStatus('error');

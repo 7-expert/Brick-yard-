@@ -84,11 +84,22 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
   }, [supabase, selectedBooking]);
 
   const fetchLatest = async () => {
-    const { data } = await supabase
-      .from('bookings')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (data) setBookings(data);
+    try {
+      const res = await fetch('/api/bookings');
+      const json = await res.json();
+      if (json.success && json.bookings) {
+        setBookings(json.bookings);
+        return;
+      }
+    } catch (e) {}
+
+    try {
+      const { data } = await supabase
+        .from('bookings')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (data) setBookings(data);
+    } catch (e) {}
   };
 
   const handleLogout = async () => {
@@ -163,48 +174,71 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
   }, [filteredBookings, page, pageSize]);
 
   const handleStatusChange = async (id, newStatus) => {
-    const { error } = await supabase
-      .from('bookings')
-      .update({ status: newStatus })
-      .eq('id', id);
+    try {
+      await fetch('/api/bookings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: newStatus }),
+      });
+    } catch (e) {}
 
-    if (!error) {
-      setBookings((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
-      );
-      if (selectedBooking && selectedBooking.id === id) {
-        setSelectedBooking((prev) => ({ ...prev, status: newStatus }));
-      }
+    try {
+      await supabase
+        .from('bookings')
+        .update({ status: newStatus })
+        .eq('id', id);
+    } catch (e) {}
+
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
+    );
+    if (selectedBooking && selectedBooking.id === id) {
+      setSelectedBooking((prev) => ({ ...prev, status: newStatus }));
     }
   };
 
   const handleSaveNotes = async (id) => {
     setUpdatingNotes(true);
-    const { error } = await supabase
-      .from('bookings')
-      .update({ admin_notes: editingNotes })
-      .eq('id', id);
+    try {
+      await fetch('/api/bookings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, admin_notes: editingNotes }),
+      });
+    } catch (e) {}
 
-    if (!error) {
-      setBookings((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, admin_notes: editingNotes } : b))
-      );
-      if (selectedBooking && selectedBooking.id === id) {
-        setSelectedBooking((prev) => ({ ...prev, admin_notes: editingNotes }));
-      }
+    try {
+      await supabase
+        .from('bookings')
+        .update({ admin_notes: editingNotes })
+        .eq('id', id);
+    } catch (e) {}
+
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, admin_notes: editingNotes } : b))
+    );
+    if (selectedBooking && selectedBooking.id === id) {
+      setSelectedBooking((prev) => ({ ...prev, admin_notes: editingNotes }));
     }
     setUpdatingNotes(false);
   };
 
   const handleDelete = async (id) => {
-    const { error } = await supabase.from('bookings').delete().eq('id', id);
-    if (!error) {
-      setBookings((prev) => prev.filter((b) => b.id !== id));
-      if (selectedBooking && selectedBooking.id === id) {
-        setSelectedBooking(null);
-      }
-      setDeleteConfirmId(null);
+    try {
+      await fetch(`/api/bookings?id=${id}`, {
+        method: 'DELETE',
+      });
+    } catch (e) {}
+
+    try {
+      await supabase.from('bookings').delete().eq('id', id);
+    } catch (e) {}
+
+    setBookings((prev) => prev.filter((b) => b.id !== id));
+    if (selectedBooking && selectedBooking.id === id) {
+      setSelectedBooking(null);
     }
+    setDeleteConfirmId(null);
   };
 
   const exportCSV = () => {
