@@ -51,26 +51,26 @@ create policy "Allow public inserts on bookings"
   with check (true);
 
 drop policy if exists "Allow admins to select bookings" on public.bookings;
-create policy "Allow admins to select bookings"
+drop policy if exists "Allow server to select bookings" on public.bookings;
+create policy "Allow server to select bookings"
   on public.bookings
   for select
-  to authenticated
-  using (public.is_admin());
+  using (true);
 
 drop policy if exists "Allow admins to update bookings" on public.bookings;
-create policy "Allow admins to update bookings"
+drop policy if exists "Allow server to update bookings" on public.bookings;
+create policy "Allow server to update bookings"
   on public.bookings
   for update
-  to authenticated
-  using (public.is_admin())
-  with check (public.is_admin());
+  using (true)
+  with check (true);
 
 drop policy if exists "Allow admins to delete bookings" on public.bookings;
-create policy "Allow admins to delete bookings"
+drop policy if exists "Allow server to delete bookings" on public.bookings;
+create policy "Allow server to delete bookings"
   on public.bookings
   for delete
-  to authenticated
-  using (public.is_admin());
+  using (true);
 
 -- Policies for admins table
 drop policy if exists "Allow admins to view admins" on public.admins;
@@ -125,10 +125,10 @@ create policy "Allow public inserts on analytics_events"
   to anon, authenticated
   with check (true);
 
--- Only admins can read analytics events
+-- Allow server & admins to read analytics events
 drop policy if exists "Allow admins to select analytics_events" on public.analytics_events;
-create policy "Allow admins to select analytics_events"
+drop policy if exists "Allow server to select analytics_events" on public.analytics_events;
+create policy "Allow server to select analytics_events"
   on public.analytics_events
   for select
-  to authenticated
-  using (public.is_admin());
+  using (true);
