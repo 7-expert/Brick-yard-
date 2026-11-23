@@ -24,14 +24,19 @@ import {
   Phone,
   Mail,
   User,
-  Building
+  Building,
+  BarChart2,
+  Users as UsersIcon,
+  ExternalLink,
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+import WebsiteAnalyticsView from '@/components/admin/WebsiteAnalyticsView';
 
 export default function AdminDashboardClient({ user, initialBookings = [] }) {
   const router = useRouter();
   const supabase = createClient();
 
+  const [activeTab, setActiveTab] = useState('bookings'); // 'bookings' | 'analytics'
   const [bookings, setBookings] = useState(initialBookings);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -342,7 +347,48 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Metric Cards Top Row */}
+        {/* Navigation View Switcher (Bookings & True Leads vs Website Analytics) */}
+        <div className="flex items-center gap-3 mb-8 border-b border-cream-dark pb-4">
+          <button
+            type="button"
+            onClick={() => setActiveTab('bookings')}
+            className={`tap-target px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'bookings'
+                ? 'bg-[#191917] text-white shadow-md'
+                : 'bg-white text-ink-soft border border-cream-dark hover:bg-cream/40'
+            }`}
+          >
+            <UsersIcon className="w-4 h-4 text-gold-400" />
+            <span>Bookings & True Leads</span>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              activeTab === 'bookings' ? 'bg-gold-500 text-white' : 'bg-gold-100 text-gold-800'
+            }`}>
+              {bookings.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('analytics')}
+            className={`tap-target px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold tracking-wide transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'analytics'
+                ? 'bg-[#191917] text-white shadow-md'
+                : 'bg-white text-ink-soft border border-cream-dark hover:bg-cream/40'
+            }`}
+          >
+            <BarChart2 className="w-4 h-4 text-gold-400" />
+            <span>Website Analytics</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+              Impressions & Clicks
+            </span>
+          </button>
+        </div>
+
+        {activeTab === 'analytics' ? (
+          <WebsiteAnalyticsView bookings={bookings} />
+        ) : (
+          <>
+            {/* Metric Cards Top Row */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
           <div
             onClick={() => setStatusFilter('all')}
@@ -620,7 +666,9 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
             </div>
           </div>
         </div>
-      </main>
+      </>
+    )}
+  </main>
 
       {/* Booking Details Drawer / Modal */}
       {selectedBooking && (

@@ -87,3 +87,38 @@ alter publication supabase_realtime add table public.bookings;
 -- 1. Sign up an admin user in Supabase Auth (or via /admin/login sign up / SQL insert).
 -- 2. Execute the following SQL in Supabase SQL Editor replacing with your user's UUID and Email:
 -- INSERT INTO public.admins (id, email) VALUES ('<USER_UUID_FROM_AUTH_USERS>', 'admin@brickyard.com');
+
+
+-- =========================================================
+-- Analytics Events Table (Tracking Impressions, Clicks, Leads)
+-- =========================================================
+create table if not exists public.analytics_events (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz default now(),
+  event_type text not null check (event_type in ('impression', 'click', 'lead')),
+  event_name text not null,
+  page_path text,
+  property_id text,
+  property_title text,
+  device text default 'desktop',
+  metadata jsonb
+);
+
+-- Enable RLS on analytics_events
+alter table public.analytics_events enable row level security;
+
+-- Anonymous and authenticated visitors can log events (insert only)
+drop policy if exists "Allow public inserts on analytics_events" on public.analytics_events;
+create policy "Allow public inserts on analytics_events"
+  on public.analytics_events
+  for insert
+  to anon, authenticated
+  with check (true);
+
+-- Only admins can read analytics events
+drop policy if exists "Allow admins to select analytics_events" on public.analytics_events;
+create policy "Allow admins to select analytics_events"
+  on public.analytics_events
+  for select
+  to authenticated
+  using (public.is_admin());
