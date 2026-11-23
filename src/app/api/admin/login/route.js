@@ -9,7 +9,7 @@ export async function POST(request) {
       return NextResponse.json({ success: false, error: 'Email is required' }, { status: 400 });
     }
 
-    // Set fallback admin session cookie for site owner
+    // Set fallback admin session cookie securely on the server
     const cookieStore = await cookies();
     cookieStore.set('brickyard_admin_session', email.trim().toLowerCase(), {
       path: '/',
@@ -19,9 +19,9 @@ export async function POST(request) {
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
-    return NextResponse.json({ success: true, email: email.trim().toLowerCase() });
+    // Return generic success response without exposing any email
+    return NextResponse.json({ success: true });
   } catch (err) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
-

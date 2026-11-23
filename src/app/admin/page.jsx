@@ -17,7 +17,7 @@ export default async function AdminPage() {
   if (sessionEmail) {
     user = {
       id: 'site-admin',
-      email: sessionEmail,
+      email: 'Administrator', // Clean generic display - never exposes personal or official gmail
     };
   } else {
     // 2. Otherwise check Supabase Auth session
