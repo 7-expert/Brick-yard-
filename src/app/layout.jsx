@@ -27,6 +27,53 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jakarta.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var clean = function(el) {
+                    if (el && el.removeAttribute) {
+                      el.removeAttribute('bis_skin_checked');
+                      el.removeAttribute('bis_register');
+                    }
+                  };
+                  var obs = new MutationObserver(function(mutations) {
+                    for (var i = 0; i < mutations.length; i++) {
+                      var m = mutations[i];
+                      if (m.type === 'attributes') {
+                        clean(m.target);
+                      } else if (m.type === 'childList') {
+                        for (var j = 0; j < m.addedNodes.length; j++) {
+                          var node = m.addedNodes[j];
+                          if (node.nodeType === 1) {
+                            clean(node);
+                            if (node.querySelectorAll) {
+                              var items = node.querySelectorAll('[bis_skin_checked], [bis_register]');
+                              for (var k = 0; k < items.length; k++) clean(items[k]);
+                            }
+                          }
+                        }
+                      }
+                    }
+                  });
+                  obs.observe(document.documentElement, {
+                    attributes: true,
+                    subtree: true,
+                    childList: true,
+                    attributeFilter: ['bis_skin_checked', 'bis_register']
+                  });
+                  window.addEventListener('DOMContentLoaded', function() {
+                    var els = document.querySelectorAll('[bis_skin_checked], [bis_register]');
+                    for (var i = 0; i < els.length; i++) clean(els[i]);
+                  });
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body suppressHydrationWarning className="antialiased min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
         <LayoutContent>
           {children}

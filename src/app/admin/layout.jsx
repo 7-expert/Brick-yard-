@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="min-h-screen bg-[#F7F5F0]">
+    <div suppressHydrationWarning className="min-h-screen bg-[#F7F5F0]">
       {children}
     </div>
   );

@@ -10,10 +10,15 @@ import { createClient } from '@/lib/supabase/client';
 function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [mounted, setMounted] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (searchParams.get('error') === 'unauthorized') {
@@ -82,8 +87,16 @@ function AdminLoginForm() {
     }
   };
 
+  if (!mounted) {
+    return (
+      <div suppressHydrationWarning className="bg-slate-900/95 backdrop-blur-xl py-9 px-7 shadow-2xl rounded-3xl sm:px-10 text-center">
+        <p className="text-xs text-slate-400">Loading secure portal...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-slate-900/95 backdrop-blur-xl py-9 px-7 shadow-2xl rounded-3xl sm:px-10">
+    <div suppressHydrationWarning className="bg-slate-900/95 backdrop-blur-xl py-9 px-7 shadow-2xl rounded-3xl sm:px-10">
       {error && (
         <div className="mb-6 p-4 rounded-2xl bg-red-500/10 flex items-start gap-3 text-red-200 text-sm">
           <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-red-400" />
