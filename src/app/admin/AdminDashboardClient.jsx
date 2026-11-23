@@ -95,7 +95,12 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    try {
+      await fetch('/api/admin/logout', { method: 'POST' });
+    } catch (e) {}
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {}
     router.push('/admin/login');
     router.refresh();
   };

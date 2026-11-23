@@ -12,8 +12,15 @@ export async function updateSession(request) {
   const supabaseUrl = rawUrl.trim().replace(/\/+$/, '');
   const supabaseKey = rawKey.trim();
 
+  const adminSessionCookie = request.cookies.get('brickyard_admin_session')?.value;
+  const pathname = request.nextUrl.pathname;
+
+  // If user has a verified fallback admin session cookie, allow access to /admin
+  if (adminSessionCookie && pathname.startsWith('/admin')) {
+    return supabaseResponse;
+  }
+
   if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder')) {
-    const pathname = request.nextUrl.pathname;
     if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
       const url = request.nextUrl.clone();
       url.pathname = '/admin/login';
@@ -46,8 +53,6 @@ export async function updateSession(request) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const pathname = request.nextUrl.pathname;
 
   // Protect /admin routes (except /admin/login)
   if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
