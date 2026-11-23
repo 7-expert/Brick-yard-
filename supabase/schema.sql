@@ -80,8 +80,18 @@ create policy "Allow admins to view admins"
   to authenticated
   using (public.is_admin());
 
--- Enable Realtime updates for bookings table
-alter publication supabase_realtime add table public.bookings;
+-- Enable Realtime updates for bookings table safely
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables 
+    where pubname = 'supabase_realtime' 
+    and schemaname = 'public' 
+    and tablename = 'bookings'
+  ) then
+    alter publication supabase_realtime add table public.bookings;
+  end if;
+end $$;
 
 -- INSTRUCTIONS TO ADD YOUR FIRST ADMIN USER:
 -- 1. Sign up an admin user in Supabase Auth (or via /admin/login sign up / SQL insert).
