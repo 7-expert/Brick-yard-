@@ -148,3 +148,4 @@ export function saveAnalyticsEvent(event) {
 export function getAnalyticsEvents() {
   return globalThis.__brickyard_store?.analytics || [];
 }
+
