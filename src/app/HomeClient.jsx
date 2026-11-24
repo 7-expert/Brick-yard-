@@ -34,9 +34,12 @@ import { formatAED } from '@/lib/tokens';
 
 export default function HomeClient() {
   const [activeCategory, setActiveCategory] = useState('Houses');
+  // Modal and Map states
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
+  const [selectedMapArea, setSelectedMapArea] = useState('Dubai, UAE');
 
   // SearchBar state (matching Image 2)
   const [purpose, setPurpose] = useState('sale'); // 'sale' | 'rent'
@@ -140,13 +143,15 @@ export default function HomeClient() {
 
               {/* Action Buttons: Explore map + Watch video */}
               <div className="flex items-center gap-4 pt-2 flex-wrap">
-                <Link
-                  href="/listings?view=map"
+                <button
+                  type="button"
+                  onClick={() => setMapModalOpen(true)}
                   className="px-6 py-3 rounded-full bg-[#0A5C4F] hover:bg-[#08493F] text-white font-semibold text-sm flex items-center gap-2 shadow-sm transition-all cursor-pointer active:scale-98"
                 >
+                  <MapIcon className="w-4 h-4 text-emerald-200" />
                   <span>Explore the map</span>
                   <span className="text-sm">→</span>
-                </Link>
+                </button>
 
                 <span className="w-[1px] h-6 bg-slate-300 hidden sm:inline-block"></span>
 
@@ -558,291 +563,6 @@ export default function HomeClient() {
 
         </div>
 
-        {/* BUILDERS & MASTER DEVELOPERS SHOWCASE SECTION (Custom Builder SVGs, Architectural Seals & Alliances) */}
-        <div className="mt-20 pt-16 border-t border-slate-200/80">
-          
-          {/* Builders Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-bold tracking-widest uppercase mb-3 shadow-xs">
-                <Building2 className="w-3.5 h-3.5 text-amber-400" />
-                <span>Accredited Developer Alliances</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-                Crafted by the UAE&apos;s visionary builders
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-xl">
-                Direct developer allocations, 0% buyer commission, and guaranteed RERA escrow protection across Dubai&apos;s master creators.
-              </p>
-            </div>
-
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-300 hover:border-slate-400 bg-white text-xs font-bold text-slate-800 transition-all shadow-xs hover:shadow-sm shrink-0 self-start md:self-end"
-            >
-              <span>Explore all developer launches</span>
-              <span>→</span>
-            </Link>
-          </div>
-
-          {/* Builder Partners Grid with Architectural SVGs */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            
-            {/* 1. EMAAR */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Burj Khalifa Spire Architectural SVG */}
-                  <svg className="w-7 h-7 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2v20" />
-                    <path d="M9 22h6" />
-                    <path d="M10 17h4" />
-                    <path d="M10 12h4" />
-                    <path d="M11 7h2" />
-                    <path d="M8 22l3-18h2l3 18" />
-                    <circle cx="12" cy="2" r="0.7" fill="currentColor" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">EMAAR</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-200">
-                    Master Tier
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Downtown Dubai · Dubai Hills · Creek Harbour
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>12+ Active Off-Plan</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 2. NAKHEEL */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-[#0A5C4F] text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Palm Jumeirah & Coastal Gateway Architectural SVG */}
-                  <svg className="w-7 h-7 text-emerald-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22V8" />
-                    <path d="M12 8c-3-3-7-3-9 0" />
-                    <path d="M12 8c3-3 7-3 9 0" />
-                    <path d="M12 12c-4-2-8-1-10 2" />
-                    <path d="M12 12c4-2 8-1 10 2" />
-                    <path d="M12 16c-3-1-6 0-8 3" />
-                    <path d="M12 16c3-1 6 0 8 3" />
-                    <path d="M5 22h14" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">NAKHEEL</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-200">
-                    Waterfront
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Palm Jumeirah · Dubai Islands · Palm Jebel Ali
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>8+ Waterfront Sites</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 3. SOBHA REALTY */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Sovereign Artisan Architectural Crest SVG */}
-                  <svg className="w-7 h-7 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">SOBHA</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-200">
-                    Artisan Built
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Sobha Hartland · Forest Sanctuary · Meydan
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>100% In-House Build</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 4. BINGHATTI */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Faceted Hyper-Tower Diamond Architectural SVG */}
-                  <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M6 3h12l4 6-10 13L2 9z" />
-                    <path d="M11 3v19" />
-                    <path d="M2 9h20" />
-                    <path d="M6 3l5 6 5-6" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">BINGHATTI</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-50 text-orange-800 font-bold border border-orange-200">
-                    Hyper-Towers
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Bugatti Residences · Jacob &amp; Co · Business Bay
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>Ultra-Branded Gems</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 5. MERAAS */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-800 text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Modern Luxury Skyline Architecture SVG */}
-                  <svg className="w-7 h-7 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="4" y="2" width="16" height="20" rx="2" />
-                    <line x1="9" y1="22" x2="9" y2="2" />
-                    <line x1="4" y1="12" x2="20" y2="12" />
-                    <line x1="4" y1="7" x2="20" y2="7" />
-                    <line x1="4" y1="17" x2="20" y2="17" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">MERAAS</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-800 font-bold">
-                    Urban Luxury
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  City Walk · Bluewaters · Port de La Mer
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>Coastal Urban Life</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 6. OMNIYAT */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-slate-950 text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Curvilinear Architectural Ribbon SVG */}
-                  <svg className="w-7 h-7 text-amber-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                    <path d="M2 12h20" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">OMNIYAT</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-900 font-bold">
-                    Sculptural
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  The Lana · One at Palm · The Opus
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>Architectural Art</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 7. DAMAC */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-[#0F172A] text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Architectural Chevron High-Rise SVG */}
-                  <svg className="w-7 h-7 text-cyan-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M3 21h18" />
-                    <path d="M5 21V7l7-4 7 4v14" />
-                    <path d="M9 10h6" />
-                    <path d="M9 14h6" />
-                    <path d="M9 18h6" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">DAMAC</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-900 font-bold border border-cyan-200">
-                    Haute Living
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Cavalli Tower · DAMAC Lagoons · Safa Two
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>Designer Residences</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-            {/* 8. ELLINGTON */}
-            <div className="group relative p-6 rounded-2xl bg-white border border-slate-200/80 hover:border-slate-400 transition-all duration-300 shadow-xs hover:shadow-md flex flex-col justify-between">
-              <div>
-                <div className="w-12 h-12 rounded-xl bg-stone-900 text-white flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-                  {/* Drafting Compass & Blueprint Grid Architecture SVG */}
-                  <svg className="w-7 h-7 text-amber-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m21.5 2-8 16" />
-                    <path d="m10.5 18-8-16" />
-                    <circle cx="12" cy="7" r="1.5" fill="currentColor" />
-                    <path d="M5 14h14" />
-                    <path d="M9 22h6" />
-                  </svg>
-                </div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-extrabold text-slate-900 text-base tracking-tight">ELLINGTON</h4>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-stone-100 text-stone-800 font-bold">
-                    Design-Led
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">
-                  Ocean House · Belgravia · Palm Boutique
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 font-semibold">
-                <span>Bespoke Architecture</span>
-                <span className="text-[#0A5C4F] group-hover:translate-x-1 transition-transform">→</span>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Builder Alliances Guarantee Strip */}
-          <div className="mt-8 p-4 sm:p-5 rounded-2xl bg-slate-900 text-white flex flex-wrap items-center justify-around gap-4 text-xs font-semibold">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>100% Direct Developer Allocation</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>0% Broker Commission on Off-Plan</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>DLD &amp; RERA Regulated Escrow</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>Exclusive Pre-Launch VIP Allotments</span>
-            </div>
-          </div>
-
-        </div>
-
       </section>
 
       {/* 6. TESTIMONIAL & SOCIAL PROOF SECTION (Exact Content & Layout of Image 3 Bottom Block) */}
@@ -1079,6 +799,112 @@ export default function HomeClient() {
                 Browse All Homes
               </Link>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* DUBAI GOOGLE MAP LIGHTBOX MODAL */}
+      {mapModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-3 sm:p-6 animate-fadeIn">
+          <div className="relative w-full max-w-5xl h-[88vh] bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col">
+            
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 bg-white border-b border-slate-200 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[#0A5C4F]/10 text-[#0A5C4F] flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 stroke-[2.2]" />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base sm:text-lg text-slate-900 leading-tight">
+                    Dubai Interactive Google Map
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Explore prime neighborhoods and developments across Dubai, UAE
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedMapArea + ' Dubai United Arab Emirates')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+                >
+                  <span>Open in Google Maps</span>
+                  <span>↗</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setMapModalOpen(false)}
+                  aria-label="Close map"
+                  className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Area Filter Pills Bar */}
+            <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center gap-2 overflow-x-auto scrollbar-none">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider shrink-0 mr-1">
+                Jump To Area:
+              </span>
+              {[
+                { name: 'Dubai, UAE', label: 'All Dubai' },
+                { name: 'Downtown Dubai', label: 'Downtown & Burj' },
+                { name: 'Palm Jumeirah', label: 'Palm Jumeirah' },
+                { name: 'Dubai Marina', label: 'Dubai Marina' },
+                { name: 'Dubai Creek Harbour', label: 'Creek Harbour' },
+                { name: 'Dubai Hills Estate', label: 'Dubai Hills' },
+                { name: 'Business Bay', label: 'Business Bay' },
+                { name: 'Jumeirah Village Circle', label: 'JVC' },
+              ].map((area) => (
+                <button
+                  key={area.name}
+                  type="button"
+                  onClick={() => setSelectedMapArea(area.name)}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                    selectedMapArea === area.name
+                      ? 'bg-[#0A5C4F] text-white shadow-xs'
+                      : 'bg-white hover:bg-slate-200 text-slate-700 border border-slate-200'
+                  }`}
+                >
+                  {area.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Live Dubai Google Map Embed */}
+            <div className="flex-1 w-full relative bg-slate-100">
+              <iframe
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                scrolling="no"
+                marginHeight="0"
+                marginWidth="0"
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(selectedMapArea + ' Dubai United Arab Emirates')}&t=&z=${selectedMapArea === 'Dubai, UAE' ? 11 : 14}&ie=UTF8&iwloc=&output=embed`}
+                className="w-full h-full"
+                title="Dubai Google Map"
+              />
+            </div>
+
+            {/* Footer with Direct Action to View All Listings on Map */}
+            <div className="p-3 sm:p-4 bg-white border-t border-slate-200 flex items-center justify-between flex-wrap gap-3">
+              <div className="text-xs text-slate-500 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Centered on: <strong className="text-slate-800">{selectedMapArea}</strong></span>
+              </div>
+              <Link
+                href="/listings?view=map"
+                onClick={() => setMapModalOpen(false)}
+                className="px-5 py-2 rounded-xl bg-[#0A5C4F] hover:bg-[#08493F] text-white text-xs font-bold transition-colors shadow-xs"
+              >
+                Browse All Properties in Map View →
+              </Link>
+            </div>
+
           </div>
         </div>
       )}
