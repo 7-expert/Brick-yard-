@@ -83,6 +83,12 @@ export async function POST(request) {
       fullName = `${firstName || ''} ${lastName || ''}`.trim();
     }
 
+    const titleWithRef = data.property_title
+      ? (data.property_id && !data.property_title.includes(data.property_id)
+          ? `${data.property_title} (Ref: ${data.property_id})`
+          : data.property_title)
+      : (data.property_id ? `Listing Ref: ${data.property_id}` : null);
+
     const bookingPayload = {
       first_name: firstName,
       last_name: lastName,
@@ -92,7 +98,7 @@ export async function POST(request) {
       country_code: data.country_code || '+971',
       inquiry_type: data.inquiry_type || 'Property Inquiry',
       message: data.message,
-      property_title: data.property_title || null,
+      property_title: titleWithRef,
       plan_title: data.plan_title || null,
       property_id: data.property_id || null,
       status: 'pending',
@@ -106,7 +112,7 @@ export async function POST(request) {
     saveAnalyticsEvent({
       eventType: 'lead',
       eventName: 'booking_submitted',
-      propertyTitle: data.property_title || null,
+      propertyTitle: titleWithRef,
       propertyId: data.property_id || null,
       metadata: {
         leadName: fullName,
@@ -115,12 +121,40 @@ export async function POST(request) {
       },
     });
 
-    // 3. Attempt insertion into Supabase if configured
+    // 3. Guaranteed insertion into Supabase (Matching exact schema columns)
     try {
       const supabase = await createClient();
-      await supabase.from('bookings').insert([bookingPayload]);
+      
+      const supabasePayload = {
+        first_name: firstName,
+        last_name: lastName,
+        full_name: fullName,
+        email: data.email || null,
+        phone: data.phone,
+        country_code: data.country_code || '+971',
+        inquiry_type: data.inquiry_type || 'Property Inquiry',
+        message: data.message,
+        property_title: titleWithRef,
+        plan_title: data.plan_title || null,
+        status: 'pending',
+        admin_notes: '',
+      };
+
+      const { data: inserted, error: insertError } = await supabase
+        .from('bookings')
+        .insert([supabasePayload])
+        .select();
+
+      if (insertError) {
+        console.error('Supabase booking insert error:', insertError.message);
+      } else if (inserted && inserted[0]) {
+        if (localRecord) {
+          localRecord.id = inserted[0].id;
+          localRecord.created_at = inserted[0].created_at;
+        }
+      }
     } catch (supabaseErr) {
-      // Supabase unconfigured or down, local storage already succeeded
+      console.error('Supabase insert exception:', supabaseErr);
     }
 
     return NextResponse.json({

@@ -56,7 +56,10 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
         { event: '*', schema: 'public', table: 'bookings' },
         (payload) => {
           if (payload.eventType === 'INSERT') {
-            setBookings((prev) => [payload.new, ...prev]);
+            setBookings((prev) => {
+              if (prev.some((b) => b.id === payload.new.id)) return prev;
+              return [payload.new, ...prev];
+            });
           } else if (payload.eventType === 'UPDATE') {
             setBookings((prev) =>
               prev.map((b) => (b.id === payload.new.id ? payload.new : b))
@@ -82,6 +85,23 @@ export default function AdminDashboardClient({ user, initialBookings = [] }) {
       supabase.removeChannel(channel);
     };
   }, [supabase, selectedBooking]);
+
+  // Periodic polling & on-focus sync to ensure inquiries appear live without manual refresh
+  useEffect(() => {
+    fetchLatest();
+
+    const interval = setInterval(() => {
+      fetchLatest();
+    }, 5000);
+
+    const onFocus = () => fetchLatest();
+    window.addEventListener('focus', onFocus);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', onFocus);
+    };
+  }, []);
 
   const fetchLatest = async () => {
     try {
