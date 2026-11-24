@@ -100,222 +100,245 @@ export default function HomeClient() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 pb-24 md:pb-16 font-sans">
+    <div className="min-h-screen bg-[#FDFBF7] text-slate-900 pb-24 md:pb-16 font-sans">
       
-      {/* 1. TOP CATEGORY PILLS BAR (Exact Reference Screenshot) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
-          {categories.map((cat) => {
-            const isActive = activeCategory === cat.key;
-            return (
-              <button
-                key={cat.key}
-                type="button"
-                onClick={() => setActiveCategory(cat.key)}
-                className={`tap-target px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-wide transition-all whitespace-nowrap cursor-pointer ${
-                  isActive
-                    ? 'bg-slate-900 text-white shadow-sm font-bold'
-                    : 'bg-white text-slate-600 border border-slate-200/90 hover:bg-slate-50'
-                }`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
+      {/* 1. HERO HEADER SECTION (Exact Reference Screenshot Layout) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 pb-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="max-w-3xl">
+            {/* Kicker */}
+            <span className="text-[#0A5C4F] font-bold text-xs tracking-widest uppercase block mb-3">
+              A better way to find home
+            </span>
+            {/* Main Title */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.08]">
+              Find a place that feels like you.
+            </h1>
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base text-slate-500 mt-3 font-normal leading-relaxed">
+              Thoughtful homes, trusted details, and a little more room to imagine.
+            </p>
+          </div>
+
+          {/* Explore the Map Pill Button */}
+          <Link
+            href="/listings?view=map"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200/90 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold shadow-xs self-start md:self-end transition-all hover:shadow-sm"
+          >
+            <span className="text-xs text-[#0A5C4F]">✦</span>
+            <span>Explore the map</span>
+          </Link>
         </div>
       </section>
 
-      {/* 2. SEARCH BAR CONSOLE WITH MAP OPTION (Exact Image 2 Layout) */}
+      {/* 2. FLOATING SEARCH CARD CONSOLE (Exact Reference Image 1 Layout) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
-          <form onSubmit={handleSearchSubmit} className="space-y-3">
-            
-            {/* ROW 1: Buy / Rent Toggle + Location Input + Map Button + Search Button */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
+        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-[0_12px_40px_rgba(0,0,0,0.04)] p-4 sm:p-6 space-y-4">
+          
+          {/* Top Toggle Tabs: Buy, Rent, New projects, Commercial */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+            {[
+              { id: 'sale', label: 'Buy' },
+              { id: 'rent', label: 'Rent' },
+              { id: 'new-projects', label: 'New projects' },
+              { id: 'commercial', label: 'Commercial' },
+            ].map((tab) => {
+              const isActive = purpose === tab.id || (tab.id === 'sale' && purpose === 'sale');
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    if (tab.id === 'new-projects') {
+                      window.location.href = '/projects';
+                    } else if (tab.id === 'commercial') {
+                      setPropertyType('Commercial');
+                      setPurpose('sale');
+                    } else {
+                      setPurpose(tab.id);
+                    }
+                  }}
+                  className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Segmented Inputs Form */}
+          <form onSubmit={handleSearchSubmit}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5 items-stretch">
               
-              {/* Buy / Rent Toggle (Matching Image 2) */}
-              <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl shrink-0 self-start sm:self-auto">
-                <button
-                  type="button"
-                  onClick={() => setPurpose('sale')}
-                  className={`tap-target px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                    purpose === 'sale'
-                      ? 'bg-[#E6F2F0] text-[#0A5C4F] shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Buy
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPurpose('rent')}
-                  className={`tap-target px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                    purpose === 'rent'
-                      ? 'bg-[#E6F2F0] text-[#0A5C4F] shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  Rent
-                </button>
+              {/* 1. LOCATION */}
+              <div className="lg:col-span-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 hover:border-slate-300 transition-colors flex flex-col justify-center">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Location
+                </label>
+                <input
+                  type="text"
+                  placeholder="Dubai, United Arab Emirates"
+                  value={locationInput}
+                  onChange={(e) => setLocationInput(e.target.value)}
+                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-700 truncate mt-0.5"
+                />
               </div>
 
-              {/* Location Input with Map Pin Icon */}
-              <div className="relative flex-1">
-                <div className="flex items-center bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 focus-within:border-[#0A5C4F] focus-within:ring-2 focus-within:ring-[#0A5C4F]/15 transition-all">
-                  <MapPin className="w-4 h-4 text-[#0A5C4F] shrink-0 mr-2.5" />
-                  <input
-                    type="text"
-                    placeholder="Enter location, community or building..."
-                    value={locationInput}
-                    onChange={(e) => setLocationInput(e.target.value)}
-                    className="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 font-medium"
-                  />
-                </div>
+              {/* 2. PROPERTY TYPE */}
+              <div className="lg:col-span-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 relative hover:border-slate-300 transition-colors flex flex-col justify-center">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Property Type
+                </label>
+                <select
+                  value={propertyType}
+                  onChange={(e) => setPropertyType(e.target.value)}
+                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-6 mt-0.5"
+                >
+                  <option value="">All residential</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Villa">Villa</option>
+                  <option value="Townhouse">Townhouse</option>
+                  <option value="Penthouse">Penthouse</option>
+                  <option value="Duplex">Duplex</option>
+                  <option value="Commercial">Commercial</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 bottom-3 pointer-events-none" />
               </div>
 
-              {/* Map View Toggle Option (Fix map section in hero requested by user) */}
-              <Link
-                href="/listings?view=map"
-                className="tap-target px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition-colors shrink-0"
-              >
-                <MapIcon className="w-4 h-4 text-[#0A5C4F]" />
-                <span>Map</span>
-              </Link>
+              {/* 3. PRICE RANGE */}
+              <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 relative hover:border-slate-300 transition-colors flex flex-col justify-center">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Price Range
+                </label>
+                <select
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(e.target.value)}
+                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-6 mt-0.5"
+                >
+                  <option value="">AED 1M – 5M</option>
+                  <option value="2000000">Under 2M AED</option>
+                  <option value="5000000">AED 1M – 5M</option>
+                  <option value="10000000">AED 5M – 10M</option>
+                  <option value="25000000">AED 10M+</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 bottom-3 pointer-events-none" />
+              </div>
 
-              {/* Green Search Button (Exact Image 2) */}
-              <button
-                type="submit"
-                className="tap-target px-6 py-2.5 bg-[#0A5C4F] hover:bg-[#08493F] text-white font-bold text-xs sm:text-sm tracking-wide rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98 shrink-0"
-              >
-                <Search className="w-4 h-4" />
-                <span>Search</span>
-              </button>
+              {/* 4. BEDS & BATHS */}
+              <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 relative hover:border-slate-300 transition-colors flex flex-col justify-center">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Beds & Baths
+                </label>
+                <select
+                  value={beds}
+                  onChange={(e) => setBeds(e.target.value)}
+                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-6 mt-0.5"
+                >
+                  <option value="">Any</option>
+                  <option value="1">1+ Beds</option>
+                  <option value="2">2+ Beds</option>
+                  <option value="3">3+ Beds</option>
+                  <option value="4">4+ Beds</option>
+                  <option value="5">5+ Beds</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 bottom-3 pointer-events-none" />
+              </div>
+
+              {/* 5. SEARCH BUTTON */}
+              <div className="lg:col-span-2 flex items-center">
+                <button
+                  type="submit"
+                  className="w-full h-[52px] bg-[#0A5C4F] hover:bg-[#08493F] text-white font-bold text-sm tracking-wide rounded-xl shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-98"
+                >
+                  <Search className="w-4 h-4 stroke-[2.5]" />
+                  <span>Search homes</span>
+                </button>
+              </div>
 
             </div>
 
-            {/* ROW 2: All / Ready / Off-Plan + Residential + Beds & Baths + Price (AED) (Exact Image 2) */}
-            <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
-              
-              {/* All / Ready / Off-Plan Toggle */}
-              <div className="inline-flex items-center bg-slate-100 p-0.5 rounded-lg shrink-0">
+            {/* Bottom Sub-Filters Row */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 mt-3 border-t border-slate-100">
+              <div className="flex items-center gap-1.5 flex-wrap">
                 {['all', 'ready', 'off-plan'].map((st) => (
                   <button
                     key={st}
                     type="button"
                     onClick={() => setStatus(st)}
-                    className={`tap-target px-3 py-1.5 rounded-md text-[11px] font-semibold capitalize transition-all cursor-pointer ${
+                    className={`px-3.5 py-1 rounded-full text-xs font-semibold capitalize transition-all cursor-pointer ${
                       status === st
-                        ? 'bg-[#E6F2F0] text-[#0A5C4F] shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-slate-100 text-slate-900 font-bold'
+                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                   >
-                    {st === 'all' ? 'All' : st === 'ready' ? 'Ready' : 'Off-Plan'}
+                    {st === 'all' ? 'All' : st === 'ready' ? 'Ready' : 'Off-plan'}
                   </button>
                 ))}
-              </div>
-
-              {/* Residential Dropdown */}
-              <div className="relative flex-1 min-w-[120px]">
-                <select
-                  value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  className="tap-target w-full appearance-none px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:border-[#0A5C4F] outline-none cursor-pointer pr-7"
+                <Link
+                  href="/listings"
+                  className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1"
                 >
-                  <option value="">Residential</option>
-                  {PROPERTY_TYPES.map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  + More filters
+                </Link>
               </div>
 
-              {/* Beds & Baths Dropdown */}
-              <div className="relative flex-1 min-w-[110px]">
-                <select
-                  value={beds}
-                  onChange={(e) => setBeds(e.target.value)}
-                  className="tap-target w-full appearance-none px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:border-[#0A5C4F] outline-none cursor-pointer pr-7"
-                >
-                  <option value="">Beds & Baths</option>
-                  <option value="studio">Studio</option>
-                  <option value="1">1 Bed</option>
-                  <option value="2">2 Beds</option>
-                  <option value="3">3 Beds</option>
-                  <option value="4">4 Beds</option>
-                  <option value="5">5+ Beds</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <div className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
+                <span className="border border-slate-200 rounded px-1.5 py-0.5 text-[10px] font-mono bg-slate-50">⌘ K</span>
+                <span>Quick search</span>
               </div>
-
-              {/* Price (AED) Dropdown */}
-              <div className="relative flex-1 min-w-[120px]">
-                <select
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
-                  className="tap-target w-full appearance-none px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-xs font-medium focus:border-[#0A5C4F] outline-none cursor-pointer pr-7"
-                >
-                  <option value="">Price (AED)</option>
-                  <option value="1000000">Up to AED 1M</option>
-                  <option value="2000000">Up to AED 2M</option>
-                  <option value="5000000">Up to AED 5M</option>
-                  <option value="10000000">Up to AED 10M</option>
-                  <option value="25000000">Up to AED 25M+</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              </div>
-
             </div>
 
           </form>
+
         </div>
       </section>
 
-      {/* 3. SECTION: "Home For You" (Feed Carousel) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Home For You
-          </h2>
+      {/* 3. SECTION: "Homes picked for you" (Exact Reference Layout) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-6">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+              Homes picked for you
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              1,248 homes in Dubai · Updated just now
+            </p>
+          </div>
+
+          {/* Recommended Sort Pill */}
+          <div className="relative">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50"
+            >
+              <span>Recommended</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            </button>
+          </div>
+        </div>
+
+        {/* 3-Column Grid Matching Reference */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          {DUBAI_PROPERTIES.slice(0, 6).map((property) => (
+            <div key={property.id}>
+              <ListingCard property={property} />
+            </div>
+          ))}
+        </div>
+
+        {/* Centered Show More Homes Button */}
+        <div className="mt-12 text-center">
           <Link
             href="/listings"
-            className="text-xs sm:text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-sm font-semibold shadow-xs transition-all hover:shadow-sm"
           >
-            See all
+            <span>Show more homes</span>
+            <span>→</span>
           </Link>
-        </div>
-
-        {/* Horizontal Snap Track on Mobile, Grid on Desktop */}
-        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
-          {homeForYou.map((property) => (
-            <div key={property.id} className="snap-start shrink-0">
-              <ListingCard property={property} />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. SECTION: "Home Nearby" (Rental Feed) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
-            Home Nearby
-          </h2>
-          <Link
-            href="/listings?purpose=rent"
-            className="text-xs sm:text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
-          >
-            See all
-          </Link>
-        </div>
-
-        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
-          {homeNearby.map((property) => (
-            <div key={property.id} className="snap-start shrink-0">
-              <ListingCard property={property} />
-            </div>
-          ))}
         </div>
       </section>
 

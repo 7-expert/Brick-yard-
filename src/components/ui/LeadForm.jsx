@@ -95,7 +95,7 @@ export default function LeadForm({
         Enquire About This Property
       </h3>
       <p className="text-xs text-slate-500 mb-5">
-        Assigned advisor: <span className="font-medium text-slate-800">{agentName}</span>
+        Direct advisory: <span className="font-medium text-slate-800">Brickyard Prime Real Estate</span>
       </p>
 
       {status === 'success' ? (

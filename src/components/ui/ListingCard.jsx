@@ -38,12 +38,15 @@ export default function ListingCard({ property, className = '' }) {
     } catch (e) {}
   };
 
-  const badgeText = property.badge || (property.isPremium ? 'Popular' : 'Popular');
+  const badgeText = property.badge || (property.isPremium ? 'Verified' : 'New Listing');
+  const numPrice = typeof property.price === 'number' ? property.price : Number(String(property.price || 0).replace(/[^0-9.-]+/g, ''));
+  const sqftPrice = (numPrice && property.sqft) ? Math.round(numPrice / property.sqft) : null;
 
   return (
-    <article className={`group flex flex-col shrink-0 w-[290px] sm:w-auto transition-all ${className}`}>
+    <article className={`group flex flex-col bg-white rounded-3xl border border-slate-200/90 shadow-xs hover:shadow-md transition-all overflow-hidden p-3 sm:p-3.5 ${className}`}>
+      
       {/* 1. Large Rounded Image Container (Matching Reference) */}
-      <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-slate-100 shadow-xs group-hover:shadow-md transition-all duration-300">
+      <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100 shadow-xs group-hover:shadow-sm transition-all duration-300">
         <Link href={`/listings/${property.id}`} className="block w-full h-full cursor-pointer">
           <img
             src={images[currentImageIdx]}
@@ -53,10 +56,11 @@ export default function ListingCard({ property, className = '' }) {
           />
         </Link>
 
-        {/* Top-Left 'Popular' / 'Verified' Pill Badge */}
-        <div className="absolute top-3.5 left-3.5 pointer-events-none z-10">
-          <span className="px-3.5 py-1 rounded-full bg-black/45 backdrop-blur-md text-white text-[11px] font-semibold tracking-wide shadow-xs">
-            {badgeText}
+        {/* Top-Left '✦ VERIFIED' / 'NEW LISTING' Pill Badge */}
+        <div className="absolute top-3 left-3 pointer-events-none z-10">
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-slate-900 text-[10px] font-bold tracking-wider uppercase shadow-xs">
+            <span className="text-[#0A5C4F]">✦</span>
+            <span>{badgeText}</span>
           </span>
         </div>
 
@@ -65,51 +69,85 @@ export default function ListingCard({ property, className = '' }) {
           type="button"
           onClick={toggleSave}
           aria-label={isSaved ? 'Remove from saved' : 'Save property'}
-          className="tap-target absolute top-3.5 right-3.5 w-9 h-9 rounded-full bg-white/95 hover:bg-white text-slate-800 flex items-center justify-center shadow-md transition-all z-10 cursor-pointer active:scale-95"
+          className="tap-target absolute top-3 right-3 w-8 h-8 rounded-full bg-white/95 hover:bg-white text-slate-800 flex items-center justify-center shadow-xs transition-all z-10 cursor-pointer active:scale-95"
         >
           <Heart
-            className={`w-4 h-4 transition-colors ${
+            className={`w-3.5 h-3.5 transition-colors ${
               isSaved ? 'text-red-500 fill-red-500' : 'text-slate-800 fill-slate-800/10'
             }`}
           />
         </button>
+
+        {/* Bottom-Left Location Overlay on Image */}
+        <div className="absolute bottom-2.5 left-3 pointer-events-none z-10">
+          <span className="text-white text-xs font-semibold drop-shadow-md">
+            {property.location || 'Dubai, UAE'}
+          </span>
+        </div>
+
+        {/* Bottom-Right Carousel Indicator Dots */}
+        <div className="absolute bottom-2.5 right-3 pointer-events-none z-10 flex items-center gap-1 opacity-80">
+          <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-white/60"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-white/60"></span>
+        </div>
       </div>
 
-      {/* 2. Specs Row + Price + Address wrapped in clickable link to open full detail page */}
-      <Link href={`/listings/${property.id}`} className="block cursor-pointer">
-        {/* Specs Row (Bath, Bed, Sqft) - Exact Reference Layout */}
-        <div className="flex items-center gap-4 text-xs text-slate-600 font-medium mt-3 px-1">
-          <span className="inline-flex items-center gap-1.5">
-            <Bath className="w-4 h-4 text-slate-400 shrink-0" />
-            <span>{property.baths} baths</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Bed className="w-4 h-4 text-slate-400 shrink-0" />
-            <span>{property.beds} beds</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Square className="w-4 h-4 text-slate-400 shrink-0" />
-            <span>{formatNumber(property.sqft)} sqft</span>
-          </span>
-        </div>
+      {/* 2. Card Content (Matching Reference Layout) */}
+      <div className="pt-4 pb-2 px-1 flex-1 flex flex-col justify-between">
+        <Link href={`/listings/${property.id}`} className="block cursor-pointer space-y-1">
+          
+          {/* Price Row: Bold Price Left, ~ AED / sq ft Right */}
+          <div className="flex items-baseline justify-between gap-2">
+            <div className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 group-hover:text-[#0A5C4F] transition-colors">
+              {property.priceAED ? formatAED(property.priceAED) : (typeof property.price === 'number' ? `AED ${property.price.toLocaleString('en-AE')}` : property.price)}
+              {property.purpose === 'rent' && (
+                <span className="text-xs text-slate-500 font-normal ml-1">/year</span>
+              )}
+            </div>
+            {sqftPrice && (
+              <span className="text-[11px] text-slate-400 font-medium shrink-0">
+                ~ AED {formatNumber(sqftPrice)} / sq ft
+              </span>
+            )}
+          </div>
 
-        {/* Bold Price Tag */}
-        <div className="mt-1 px-1">
-          <span className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 group-hover:text-[#0A5C4F] transition-colors">
-            {property.priceAED ? formatAED(property.priceAED) : property.price}
-          </span>
-          {property.purpose === 'rent' && (
-            <span className="text-xs text-slate-500 font-normal ml-1">/year</span>
-          )}
-        </div>
+          {/* Property Title */}
+          <h3 className="font-bold text-base text-slate-900 leading-snug truncate pt-0.5 group-hover:text-[#0A5C4F] transition-colors">
+            {property.title}
+          </h3>
 
-        {/* Address & Title Line */}
-        <div className="mt-0.5 px-1">
-          <p className="text-xs sm:text-sm text-slate-500 truncate font-normal group-hover:text-slate-800 transition-colors">
-            {property.address || property.location || '10 Tranquility Way, Downtown Dubai, UAE'}
+          {/* SubLocation / Community */}
+          <p className="text-xs text-slate-500 truncate">
+            {property.subLocation || property.address || property.location}
           </p>
+
+          {/* Specs Row: 3 beds · 4 baths · 2,690 sq ft · Villa */}
+          <div className="flex items-center gap-2 text-xs text-slate-600 font-medium pt-2 flex-wrap">
+            <span>{property.beds} beds</span>
+            <span className="text-slate-300">·</span>
+            <span>{property.baths} baths</span>
+            <span className="text-slate-300">·</span>
+            <span>{formatNumber(property.sqft)} sq ft</span>
+            <span className="text-slate-300">·</span>
+            <span>{property.type}</span>
+          </div>
+
+        </Link>
+
+        {/* View Property Details Link */}
+        <div className="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+          <Link
+            href={`/listings/${property.id}`}
+            className="text-[11px] font-bold text-[#0A5C4F] hover:text-[#08493F] uppercase tracking-wider flex items-center gap-1 transition-colors"
+          >
+            <span>View property details</span>
+            <span>→</span>
+          </Link>
         </div>
-      </Link>
+
+      </div>
+
     </article>
   );
 }

@@ -38,60 +38,75 @@ export default function Navigation() {
   }, [pathname]);
 
   const navLinks = [
-    { label: 'Feed', href: '/' },
-    { label: 'Houses', href: '/listings?type=Villa' },
-    { label: 'Apartments', href: '/listings?type=Apartment' },
-    { label: 'New Projects', href: '/projects' },
-    { label: 'Agents', href: '/agents' },
-    { label: 'Area Guides', href: '/areas' },
+    { label: 'Discover', href: '/' },
+    { label: 'Buy', href: '/listings?purpose=sale' },
+    { label: 'Rent', href: '/listings?purpose=rent' },
+    { label: 'New projects', href: '/projects' },
+    { label: 'Area guide', href: '/areas' },
   ];
 
   return (
     <>
-      {/* TOP HEADER (Matching Reference: Logo Left, Feed Center, Hamburger Right) */}
+      {/* TOP HEADER (Matching Reference: Large Logo Left, Links Center, List Property + Avatar Right) */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
           
-          {/* Left: Brand Icon */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <img
-              src="/logo1_crop.png"
-              alt="Brickyard Logo"
-              className="w-8 h-8 sm:w-9 sm:h-9 object-contain group-hover:scale-105 transition-transform"
-            />
-            <span className="hidden sm:inline font-bold text-lg tracking-tight text-slate-900">
-              Brickyard
+          {/* Left: Brand Logo (Significantly Increased Size) */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0A5C4F]/10 flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+              <img
+                src="/logo1_crop.png"
+                alt="Brickyard Logo"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="font-extrabold text-2xl sm:text-3xl tracking-tight text-slate-900 lowercase font-sans">
+              brickyard
             </span>
           </Link>
 
-          {/* Center Title (Feed) */}
-          <div className="text-center">
-            <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-              Feed
-            </h1>
-          </div>
+          {/* Center: Desktop Nav Links (Matching Reference Image) */}
+          <nav className="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+            {navLinks.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`hover:text-slate-900 transition-colors ${
+                  pathname === item.href || (item.href === '/' && pathname === '/')
+                    ? 'text-slate-900 font-bold'
+                    : ''
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
-          {/* Right: Actions & Hamburger */}
-          <div className="flex items-center gap-2">
-            {/* Desktop Nav Links */}
-            <nav className="hidden md:flex items-center gap-6 text-xs sm:text-sm font-semibold text-slate-600 mr-4">
-              {navLinks.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  className={`hover:text-slate-900 transition-colors ${
-                    pathname === item.href ? 'text-slate-900 font-bold' : ''
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+          {/* Right: Actions, List Your Property & Avatar */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            
+            {/* List Your Property Button */}
+            <Link
+              href="/contact"
+              className="hidden lg:inline-flex text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+            >
+              List your property
+            </Link>
 
+            {/* User Avatar Circle from Reference Image */}
+            <Link
+              href="/saved"
+              title="Saved Homes & Profile"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#EAD8CD] text-[#7A4B3A] font-bold text-xs sm:text-sm flex items-center justify-center shadow-xs hover:ring-2 hover:ring-[#0A5C4F]/20 transition-all cursor-pointer"
+            >
+              S
+            </Link>
+
+            {/* Saved Count Heart */}
             <Link
               href="/saved"
               aria-label="Saved listings"
-              className="tap-target relative p-2 rounded-full hover:bg-slate-100 text-slate-700 hidden sm:flex items-center justify-center cursor-pointer"
+              className="tap-target relative p-2 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center cursor-pointer"
             >
               <Heart className="w-5 h-5 text-slate-700" />
               {savedCount > 0 && (
@@ -101,12 +116,12 @@ export default function Navigation() {
               )}
             </Link>
 
-            {/* Hamburger Button (Exact Reference) */}
+            {/* Hamburger Button for Mobile */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle navigation menu"
-              className="tap-target p-2 text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+              className="md:hidden tap-target p-2 text-slate-800 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>

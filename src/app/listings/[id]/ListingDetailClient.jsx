@@ -361,54 +361,53 @@ export default function ListingDetailClient({ property }) {
 
           </div>
 
-          {/* RIGHT COLUMN: Verified Advisor Card + Community Card */}
+          {/* RIGHT COLUMN: Direct Property Inquiry & Viewing Desk */}
           <div className="lg:col-span-4 space-y-5 lg:sticky lg:top-32">
             
-            {/* VERIFIED AGENT CARD */}
+            {/* DIRECT PROPERTY CONTACT CARD (No Personal Agent Profile) */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              {/* Verified Banner Header */}
+              {/* Brickyard Banner Header */}
               <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-[#0A5C4F] text-white px-5 py-3 flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
                   <span className="font-bold text-xs tracking-wider uppercase">Brickyard Verified</span>
                 </div>
-                <span className="text-[10px] text-emerald-300 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
-                  Prime Specialist
+                <span className="text-[10px] text-emerald-300 font-semibold bg-emerald-950/60 px-2.5 py-0.5 rounded border border-emerald-800/40">
+                  Verified Listing
                 </span>
               </div>
 
-              {/* Agent Profile & Badges */}
+              {/* Direct Advisory Desk Info */}
               <div className="p-5 flex flex-col items-center text-center">
-                {/* Agent Avatar */}
-                <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-emerald-500 mb-3 shadow-sm bg-slate-100">
+                <div className="w-16 h-16 rounded-2xl bg-[#0A5C4F]/10 flex items-center justify-center p-2 mb-3 shadow-xs">
                   <img
-                    src={agent.image || "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80"}
-                    alt={agent.name}
-                    className="w-full h-full object-cover"
+                    src="/logo1_crop.png"
+                    alt="Brickyard Logo"
+                    className="w-full h-full object-contain"
                   />
                 </div>
 
                 <h3 className="font-bold text-lg text-slate-900 leading-snug">
-                  {agent.name}
+                  Brickyard Prime Real Estate
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  {agent.agency || "Brickyard Real Estate"}
+                  Direct Developer & Luxury Advisory Desk
                 </p>
 
-                {/* Two Pill Badges */}
+                {/* Badges */}
                 <div className="flex items-center gap-2 mt-3 flex-wrap justify-center">
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Premier Partner
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Official Partner
                   </span>
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-semibold">
-                    <span>⚡</span> Fast Responder
+                    <span>⚡</span> Instant Response
                   </span>
                 </div>
 
-                {/* Action Buttons: Email | Call | WhatsApp */}
+                {/* Direct Action Buttons: Email | Call | WhatsApp */}
                 <div className="grid grid-cols-3 gap-2 w-full mt-5">
                   <a
-                    href={`mailto:${agent.email || 'info@brickyard.ae'}?subject=Inquiry: ${encodeURIComponent(property.title)}`}
+                    href={`mailto:info@brickyard.ae?subject=Inquiry: ${encodeURIComponent(property.title)}`}
                     onClick={() => trackClick('email_agent_click', 'Agent Email Contact', { propertyId: property.id, propertyTitle: property.title })}
                     className="tap-target py-2 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                   >
@@ -417,7 +416,7 @@ export default function ListingDetailClient({ property }) {
                   </a>
 
                   <a
-                    href={`tel:${agent.phone || '+971501182342'}`}
+                    href="tel:+971501182342"
                     onClick={() => trackClick('call_agent_click', 'Agent Phone Call', { propertyId: property.id, propertyTitle: property.title })}
                     className="tap-target py-2 px-2 rounded-xl bg-[#0A5C4F] hover:bg-[#08493F] text-white text-xs font-semibold flex items-center justify-center gap-1 transition-colors shadow-xs"
                   >
@@ -426,7 +425,7 @@ export default function ListingDetailClient({ property }) {
                   </a>
 
                   <a
-                    href={`https://wa.me/${agent.whatsapp || '971501182342'}?text=Hi,%20I%20am%20interested%20in%20${encodeURIComponent(property.title)}`}
+                    href={`https://wa.me/971501182342?text=Hi,%20I%20am%20interested%20in%20${encodeURIComponent(property.title)}`}
                     onClick={() => trackClick('whatsapp_agent_click', 'Agent WhatsApp Contact', { propertyId: property.id, propertyTitle: property.title })}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -436,14 +435,6 @@ export default function ListingDetailClient({ property }) {
                     <span>WhatsApp</span>
                   </a>
                 </div>
-
-                <Link
-                  href="/agents"
-                  className="text-xs font-semibold text-[#0A5C4F] hover:underline mt-4 flex items-center gap-0.5"
-                >
-                  <span>View all properties</span>
-                  <span>›</span>
-                </Link>
               </div>
             </div>
 
@@ -477,7 +468,7 @@ export default function ListingDetailClient({ property }) {
               <LeadForm
                 propertyId={property.id}
                 propertyTitle={property.title}
-                agentName={agent.name}
+                agentName="Brickyard Luxury Advisory"
               />
             </div>
 
@@ -506,14 +497,14 @@ export default function ListingDetailClient({ property }) {
                 Request Video Tour
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                Our agent will send a high-resolution video walkthrough directly to your WhatsApp or Email.
+                Brickyard will send a high-resolution video walkthrough directly to your WhatsApp or Email.
               </p>
             </div>
             <LeadForm
               purpose="video_tour"
               propertyId={property.id}
               propertyTitle={property.title}
-              agentName={agent.name}
+              agentName="Brickyard Luxury Advisory"
               onSuccess={() => {
                 setTimeout(() => setVideoModalOpen(false), 2000);
               }}
