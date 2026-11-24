@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Award, Search, Phone, MessageSquare, CheckCircle, ShieldCheck } from 'lucide-react';
-import { TRUBROKER_AGENTS } from '@/data/dubaiProperties';
+import { BRICKYARD_AGENTS } from '@/data/dubaiProperties';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import AgentCard from '@/components/ui/AgentCard';
 
@@ -13,7 +13,7 @@ export default function AgentsPage() {
 
   const languages = ['All', 'English', 'Arabic', 'Russian', 'French', 'Urdu'];
 
-  const filteredAgents = TRUBROKER_AGENTS.filter((agent) => {
+  const filteredAgents = BRICKYARD_AGENTS.filter((agent) => {
     const matchesSearch =
       agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       agent.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -37,7 +37,7 @@ export default function AgentsPage() {
           <div className="mt-4 max-w-2xl">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold uppercase tracking-wider mb-3 border border-white/20">
               <Award className="w-3.5 h-3.5 text-[#FF6B35]" />
-              <span>TruBroker™ Certified Specialists</span>
+              <span>Brickyard Certified Specialists</span>
             </span>
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2">
               Find a Trusted Dubai Agent

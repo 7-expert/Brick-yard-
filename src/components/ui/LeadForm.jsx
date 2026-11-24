@@ -5,6 +5,7 @@ import { Send, CheckCircle2, AlertCircle } from 'lucide-react';
 import { trackLeadSubmission } from '@/lib/analytics';
 
 export default function LeadForm({
+  propertyId = null,
   propertyTitle = 'General Inquiry',
   agentName = 'Brickyard Luxury Specialist',
   agentId = null,
@@ -60,6 +61,7 @@ export default function LeadForm({
           country_code: countryCode,
           inquiry_type: inquiryType,
           property_title: propertyTitle,
+          property_id: propertyId,
           message: `${message} [Assigned Agent: ${agentName}]`,
           website: honeypot,
         }),
@@ -75,6 +77,7 @@ export default function LeadForm({
           fullName,
           phone: fullPhone,
           propertyTitle,
+          propertyId,
           inquiryType,
         });
       }
@@ -100,7 +103,7 @@ export default function LeadForm({
           <CheckCircle2 className="w-10 h-10 text-[#0A5C4F] mx-auto mb-2" />
           <h4 className="text-sm font-bold text-[#0A5C4F]">Inquiry Submitted Successfully</h4>
           <p className="text-xs text-slate-600 mt-1">
-            Our TruBroker™ advisor has received your request and will contact you within 5 minutes.
+            Our Brickyard luxury advisor has received your request and will contact you within 5 minutes.
           </p>
           <button
             type="button"

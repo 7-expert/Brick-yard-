@@ -43,7 +43,7 @@ export const DUBAI_AMENITIES = [
   "Barbecue Area",
 ];
 
-export const TRUBROKER_AGENTS = [
+export const BRICKYARD_AGENTS = [
   {
     id: "agent-1",
     name: "Tariq Al-Mansoor",
@@ -100,6 +100,8 @@ export const TRUBROKER_AGENTS = [
   },
 ];
 
+export const TRUBROKER_AGENTS = BRICKYARD_AGENTS;
+
 export const DUBAI_PROPERTIES = [
   {
     id: "by-101",
@@ -139,7 +141,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Burj Khalifa / Dubai Mall Metro", distance: "6 mins walk", type: "metro" },
       { name: "Dubai Opera", distance: "4 mins walk", type: "culture" },
     ],
-    agent: TRUBROKER_AGENTS[0],
+    agent: BRICKYARD_AGENTS[0],
     createdAt: "2026-11-15T08:00:00Z",
   },
   {
@@ -180,7 +182,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Nakheel Mall", distance: "4 mins drive", type: "mall" },
       { name: "The Pointe Marina", distance: "3 mins drive", type: "beach" },
     ],
-    agent: TRUBROKER_AGENTS[1],
+    agent: BRICKYARD_AGENTS[1],
     createdAt: "2026-11-18T10:15:00Z",
   },
   {
@@ -221,7 +223,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Marina Walk Cafes", distance: "Direct access", type: "dining" },
       { name: "JBR Beach", distance: "8 mins walk", type: "beach" },
     ],
-    agent: TRUBROKER_AGENTS[1],
+    agent: BRICKYARD_AGENTS[1],
     createdAt: "2026-11-17T14:20:00Z",
   },
   {
@@ -262,7 +264,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Business Bay Metro", distance: "4 mins drive", type: "metro" },
       { name: "Downtown / DIFC", distance: "5 mins drive", type: "business" },
     ],
-    agent: TRUBROKER_AGENTS[0],
+    agent: BRICKYARD_AGENTS[0],
     createdAt: "2026-11-16T11:00:00Z",
   },
   {
@@ -303,7 +305,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Dubai Hills Golf Club", distance: "4 mins drive", type: "golf" },
       { name: "GEMS Wellington Academy", distance: "5 mins drive", type: "school" },
     ],
-    agent: TRUBROKER_AGENTS[2],
+    agent: BRICKYARD_AGENTS[2],
     createdAt: "2026-11-14T09:30:00Z",
   },
   {
@@ -344,7 +346,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Al Khail Road Exit", distance: "2 mins", type: "highway" },
       { name: "JSS International School", distance: "4 mins walk", type: "school" },
     ],
-    agent: TRUBROKER_AGENTS[2],
+    agent: BRICKYARD_AGENTS[2],
     createdAt: "2026-11-19T07:15:00Z",
   },
   {
@@ -385,7 +387,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Gate Avenue Retail", distance: "Direct lift access", type: "dining" },
       { name: "Emirates Towers", distance: "3 mins drive", type: "business" },
     ],
-    agent: TRUBROKER_AGENTS[0],
+    agent: BRICKYARD_AGENTS[0],
     createdAt: "2026-11-18T16:00:00Z",
   },
   {
@@ -426,7 +428,7 @@ export const DUBAI_PROPERTIES = [
       { name: "Ranches Community Centre", distance: "2 mins drive", type: "mall" },
       { name: "Jumeirah English Speaking School (JESS)", distance: "3 mins drive", type: "school" },
     ],
-    agent: TRUBROKER_AGENTS[1],
+    agent: BRICKYARD_AGENTS[1],
     createdAt: "2026-11-13T12:00:00Z",
   },
 ];

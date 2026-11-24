@@ -20,7 +20,7 @@ export const metadata = {
     default: "Brickyard | Dubai Property Portal - Apartments, Villas & Off-Plan for Sale & Rent",
     template: "%s | Brickyard Real Estate Dubai",
   },
-  description: "Search 15,000+ verified properties for sale and rent in Dubai, UAE. Find apartments, luxury villas, and off-plan projects with TruBroker™ verified agents.",
+  description: "Search 15,000+ verified properties for sale and rent in Dubai, UAE. Find apartments, luxury villas, and off-plan projects with Brickyard verified agents.",
   keywords: ["Dubai real estate", "apartments for rent in Dubai", "properties for sale Dubai", "off plan projects Dubai", "Brickyard"],
 };
 

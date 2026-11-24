@@ -25,6 +25,25 @@ export async function POST(request) {
       return NextResponse.json({ success: true });
     }
 
+    // Auto-resolve propertyId and propertyTitle from page_path if not explicitly provided
+    const pagePath = event.pagePath || event.page_path || '';
+    let propId = event.propertyId || event.property_id || (event.metadata && (event.metadata.propertyId || event.metadata.property_id)) || null;
+    let propTitle = event.propertyTitle || event.property_title || (event.metadata && (event.metadata.propertyTitle || event.metadata.property_title)) || null;
+
+    if ((!propId || !propTitle) && pagePath.includes('/listings/')) {
+      const slugOrId = pagePath.split('/listings/')[1]?.split('?')[0]?.split('/')[0];
+      if (slugOrId) {
+        const match = DUBAI_PROPERTIES.find((p) => p.id === slugOrId || p.slug === slugOrId);
+        if (match) {
+          propId = propId || match.id;
+          propTitle = propTitle || match.title;
+        }
+      }
+    }
+
+    event.propertyId = propId;
+    event.propertyTitle = propTitle;
+
     // 1. Guaranteed storage in server store (works in all environments & private windows)
     saveAnalyticsEvent(event);
 
@@ -39,8 +58,8 @@ export async function POST(request) {
             event_name: event.eventName || event.event_name || 'page_view',
             page_path: event.pagePath || event.page_path || '/',
             device: event.device || 'desktop',
-            property_id: event.propertyId || event.property_id || null,
-            property_title: event.propertyTitle || event.property_title || null,
+            property_id: propId,
+            property_title: propTitle,
             metadata: event.metadata || event,
           },
         ]);
@@ -164,55 +183,112 @@ export async function GET(request) {
 
     // Real top properties by actual recorded events and inquiries
     const propertyEngagementMap = {};
+    
     recordedEvents.forEach((ev) => {
-      const propId = ev.property_id || (ev.metadata && ev.metadata.propertyId);
-      const propTitle = ev.property_title || (ev.metadata && ev.metadata.propertyTitle);
+      let propId = ev.property_id || (ev.metadata && (ev.metadata.propertyId || ev.metadata.property_id));
+      let propTitle = ev.property_title || (ev.metadata && (ev.metadata.propertyTitle || ev.metadata.property_title));
+
+      // Resolve from page_path if property_id / title is not explicitly attached
+      if ((!propId || !propTitle) && ev.page_path && ev.page_path.includes('/listings/')) {
+        const slugOrId = ev.page_path.split('/listings/')[1]?.split('?')[0]?.split('/')[0];
+        if (slugOrId) {
+          const match = DUBAI_PROPERTIES.find((p) => p.id === slugOrId || p.slug === slugOrId);
+          if (match) {
+            propId = propId || match.id;
+            propTitle = propTitle || match.title;
+          }
+        }
+      }
+
       if (propTitle || propId) {
-        const key = propTitle || propId;
-        if (!propertyEngagementMap[key]) {
-          propertyEngagementMap[key] = {
-            id: propId || key,
-            title: propTitle || key,
+        const matched = DUBAI_PROPERTIES.find(
+          (p) => (propId && (p.id === propId || p.slug === propId)) ||
+                 (propTitle && p.title.toLowerCase() === propTitle.toLowerCase())
+        );
+        const canonId = matched?.id || propId || propTitle;
+        const canonTitle = matched?.title || propTitle || propId;
+
+        if (!propertyEngagementMap[canonId]) {
+          propertyEngagementMap[canonId] = {
+            id: canonId,
+            title: canonTitle,
             impressions: 0,
             clicks: 0,
             leads: 0,
           };
         }
-        if (ev.event_type === 'impression') propertyEngagementMap[key].impressions++;
-        if (ev.event_type === 'click') propertyEngagementMap[key].clicks++;
+        if (ev.event_type === 'impression') propertyEngagementMap[canonId].impressions++;
+        if (ev.event_type === 'click') propertyEngagementMap[canonId].clicks++;
+        if (ev.event_type === 'lead') propertyEngagementMap[canonId].leads++;
       }
     });
 
-    // Also factor in actual bookings referencing properties
+    // Also factor in true leads from bookings table
     trueLeadsList.forEach((b) => {
       const title = b.property_title || b.plan_title;
-      if (title) {
-        if (!propertyEngagementMap[title]) {
-          propertyEngagementMap[title] = {
-            id: b.property_id || title,
-            title,
+      const bPropId = b.property_id;
+      if (title || bPropId) {
+        const matched = DUBAI_PROPERTIES.find(
+          (p) => (bPropId && (p.id === bPropId || p.slug === bPropId)) ||
+                 (title && p.title.toLowerCase() === title.toLowerCase())
+        );
+        const canonId = matched?.id || bPropId || title;
+        const canonTitle = matched?.title || title || bPropId;
+
+        if (!propertyEngagementMap[canonId]) {
+          propertyEngagementMap[canonId] = {
+            id: canonId,
+            title: canonTitle,
             impressions: 0,
             clicks: 0,
             leads: 0,
           };
         }
-        propertyEngagementMap[title].leads++;
+        propertyEngagementMap[canonId].leads++;
       }
     });
 
+    // Ensure baseline: if a property captured leads, it had at least as many views and clicks
+    Object.values(propertyEngagementMap).forEach((item) => {
+      if (item.leads > 0) {
+        if (item.impressions < item.leads) {
+          item.impressions = item.leads;
+        }
+        if (item.clicks < item.leads) {
+          item.clicks = item.leads;
+        }
+      }
+    });
+
+    function formatAnalyticsPrice(matched) {
+      if (!matched) return 'Price on Request';
+      const val = matched.price;
+      if (typeof val === 'number') {
+        if (val >= 1000000) {
+          const millions = (val / 1000000).toFixed(2).replace(/\.00$/, '').replace(/(\.[1-9])0$/, '$1');
+          return `AED ${millions}M`;
+        }
+        const formatted = val.toLocaleString('en-AE');
+        return `AED ${formatted}${matched.period ? `/${matched.period}` : ''}`;
+      }
+      return matched.price ? `AED ${matched.price}` : 'Price on Request';
+    }
+
     let topProperties = Object.values(propertyEngagementMap)
+      // Only include properties that had real engagement
+      .filter((item) => item.impressions > 0 || item.clicks > 0 || item.leads > 0)
       .sort((a, b) => (b.leads * 10 + b.clicks * 2 + b.impressions) - (a.leads * 10 + a.clicks * 2 + a.impressions))
-      .slice(0, 6)
+      .slice(0, 8)
       .map((item) => {
         const matched = DUBAI_PROPERTIES.find(
-          (p) => p.title.toLowerCase() === item.title.toLowerCase() || p.id === item.id
+          (p) => p.id === item.id || p.title.toLowerCase() === item.title.toLowerCase()
         );
         const ctrVal = item.impressions > 0 ? ((item.clicks / item.impressions) * 100).toFixed(1) : '0.0';
         return {
-          id: item.id,
-          title: item.title,
+          id: matched?.id || item.id,
+          title: matched?.title || item.title,
           location: matched?.location || 'Dubai, UAE',
-          price: matched?.priceAED ? `AED ${(matched.priceAED / 1000000).toFixed(1)}M` : matched?.price || 'Price on Request',
+          price: formatAnalyticsPrice(matched),
           impressions: item.impressions,
           clicks: item.clicks,
           leads: item.leads,

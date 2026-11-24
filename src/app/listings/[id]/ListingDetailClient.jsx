@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { trackImpression, trackClick } from '@/lib/analytics';
 import {
   Bed,
   Bath,
@@ -67,6 +68,17 @@ export default function ListingDetailClient({ property }) {
   const toggleSave = () => {
     setIsSaved(!isSaved);
   };
+
+  // Track property listing impression accurately
+  useEffect(() => {
+    if (property?.id) {
+      trackImpression(
+        typeof window !== 'undefined' ? window.location.pathname : `/listings/${property.id}`,
+        property.title,
+        { propertyId: property.id, propertyTitle: property.title }
+      );
+    }
+  }, [property?.id, property?.title]);
 
   const agent = property.agent || {
     name: "Muhammad Shahzad",
@@ -141,7 +153,7 @@ export default function ListingDetailClient({ property }) {
       {/* 2. MAIN DETAIL CONTENT */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         
-        {/* Two-Column Grid: Left (Gallery + Specs) + Right (TruBroker Sidebar matching Image 1) */}
+        {/* Two-Column Grid: Left (Gallery + Specs) + Right (Agent Sidebar) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* LEFT COLUMN: Gallery with Map & Video buttons + Property Specs (8 cols) */}
@@ -349,19 +361,19 @@ export default function ListingDetailClient({ property }) {
 
           </div>
 
-          {/* RIGHT COLUMN: TruBroker Card + Community Card (Matching Image 1) */}
+          {/* RIGHT COLUMN: Verified Advisor Card + Community Card */}
           <div className="lg:col-span-4 space-y-5 lg:sticky lg:top-32">
             
-            {/* TRUBROKER™ AGENT CARD (Exact layout of Image 1) */}
+            {/* VERIFIED AGENT CARD */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-              {/* TruBroker Banner Header */}
+              {/* Verified Banner Header */}
               <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-[#0A5C4F] text-white px-5 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-emerald-400" />
-                  <span className="font-bold text-xs tracking-wider uppercase">TruBroker™</span>
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span className="font-bold text-xs tracking-wider uppercase">Brickyard Verified</span>
                 </div>
                 <span className="text-[10px] text-emerald-300 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
-                  Verified Agent
+                  Prime Specialist
                 </span>
               </div>
 
@@ -383,20 +395,21 @@ export default function ListingDetailClient({ property }) {
                   {agent.agency || "Brickyard Real Estate"}
                 </p>
 
-                {/* Two Pill Badges (Quality Lister & Responsive Broker from Image 1) */}
+                {/* Two Pill Badges */}
                 <div className="flex items-center gap-2 mt-3 flex-wrap justify-center">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-cyan-50 border border-cyan-200 text-cyan-800 text-[11px] font-semibold">
-                    <span>💎</span> Quality Lister
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Premier Partner
                   </span>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-purple-50 border border-purple-200 text-purple-800 text-[11px] font-semibold">
-                    <span>⚡</span> Responsive Broker
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-semibold">
+                    <span>⚡</span> Fast Responder
                   </span>
                 </div>
 
-                {/* Action Buttons: Email | Call | WhatsApp (Matching Image 1) */}
+                {/* Action Buttons: Email | Call | WhatsApp */}
                 <div className="grid grid-cols-3 gap-2 w-full mt-5">
                   <a
                     href={`mailto:${agent.email || 'info@brickyard.ae'}?subject=Inquiry: ${encodeURIComponent(property.title)}`}
+                    onClick={() => trackClick('email_agent_click', 'Agent Email Contact', { propertyId: property.id, propertyTitle: property.title })}
                     className="tap-target py-2 px-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors"
                   >
                     <Mail className="w-3.5 h-3.5" />
@@ -405,6 +418,7 @@ export default function ListingDetailClient({ property }) {
 
                   <a
                     href={`tel:${agent.phone || '+971501182342'}`}
+                    onClick={() => trackClick('call_agent_click', 'Agent Phone Call', { propertyId: property.id, propertyTitle: property.title })}
                     className="tap-target py-2 px-2 rounded-xl bg-[#0A5C4F] hover:bg-[#08493F] text-white text-xs font-semibold flex items-center justify-center gap-1 transition-colors shadow-xs"
                   >
                     <Phone className="w-3.5 h-3.5" />
@@ -413,6 +427,7 @@ export default function ListingDetailClient({ property }) {
 
                   <a
                     href={`https://wa.me/${agent.whatsapp || '971501182342'}?text=Hi,%20I%20am%20interested%20in%20${encodeURIComponent(property.title)}`}
+                    onClick={() => trackClick('whatsapp_agent_click', 'Agent WhatsApp Contact', { propertyId: property.id, propertyTitle: property.title })}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="tap-target py-2 px-2 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-semibold flex items-center justify-center gap-1 transition-colors shadow-xs"

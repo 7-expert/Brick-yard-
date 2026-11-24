@@ -25,7 +25,7 @@ export default function AgentCard({ agent, className = '' }) {
             {agent.verified && (
               <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-[#E6F2F0] text-[#0A5C4F] text-[10px] font-bold tracking-wider uppercase border border-[#B3D6D0]">
                 <CheckCircle2 className="w-3 h-3 stroke-[2.5]" />
-                <span>TruBroker™</span>
+                <span>Verified Specialist</span>
               </span>
             )}
           </div>
