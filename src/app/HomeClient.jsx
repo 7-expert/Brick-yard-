@@ -192,11 +192,11 @@ export default function HomeClient() {
       </section>
 
       {/* 2. FLOATING SEARCH CARD CONSOLE (Matching Reference Image) */}
-      <section className="relative z-20 -mt-6 sm:-mt-10 lg:-mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-5 sm:p-7 space-y-4">
+      <section className="relative z-20 -mt-6 sm:-mt-10 lg:-mt-12 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-3.5 sm:p-7 space-y-3.5 sm:space-y-4">
           
-          {/* Top Toggle Tabs: Buy, Rent, New projects, Commercial */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+          {/* Top Toggle Tabs: Buy, Rent, New projects, Commercial (Never truncated on mobile) */}
+          <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto pb-1 scrollbar-none flex-nowrap -mx-1 px-1">
             {[
               { id: 'sale', label: 'Buy' },
               { id: 'rent', label: 'Rent' },
@@ -218,7 +218,7 @@ export default function HomeClient() {
                       setPurpose(tab.id);
                     }
                   }}
-                  className={`px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                     isActive
                       ? 'bg-slate-900 text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -334,15 +334,15 @@ export default function HomeClient() {
 
             </div>
 
-            {/* Bottom Sub-Filters Row */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 mt-3 border-t border-slate-100">
+            {/* Bottom Sub-Filters Row (Responsive Flex Wrap) */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 mt-3 border-t border-slate-100">
               <div className="flex items-center gap-1.5 flex-wrap">
                 {['all', 'ready', 'off-plan'].map((st) => (
                   <button
                     key={st}
                     type="button"
                     onClick={() => setStatus(st)}
-                    className={`px-3.5 py-1 rounded-full text-xs font-semibold capitalize transition-all cursor-pointer ${
+                    className={`px-3 py-1 rounded-full text-xs font-semibold capitalize transition-all cursor-pointer shrink-0 ${
                       status === st
                         ? 'bg-slate-100 text-slate-900 font-bold'
                         : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
@@ -353,7 +353,7 @@ export default function HomeClient() {
                 ))}
                 <Link
                   href="/listings"
-                  className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1"
+                  className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 py-1 shrink-0"
                 >
                   + More filters
                 </Link>
@@ -361,7 +361,7 @@ export default function HomeClient() {
 
               <Link
                 href="/listings"
-                className="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition-colors"
+                className="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition-colors self-start sm:self-auto"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
                 <span>Quick search</span>
@@ -597,43 +597,43 @@ export default function HomeClient() {
             </div>
           </div>
 
-          {/* Testimonial Showcase Box (Exact Image 3 Split Architecture) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          {/* Testimonial Showcase Box (Responsive Split Architecture) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch">
             
             {/* Left Col: Villa Photo with Customer Satisfaction Pill Overlay (5 cols) */}
-            <div className="lg:col-span-5 relative rounded-3xl overflow-hidden shadow-sm min-h-[300px] lg:min-h-[380px] bg-slate-900">
+            <div className="lg:col-span-5 relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm h-60 sm:h-80 lg:h-full min-h-[220px] sm:min-h-[300px] lg:min-h-[380px] bg-slate-900">
               <img
                 src="/waterfront_villa_1790348391865.jpg"
                 alt="Extraordinary Home"
                 className="w-full h-full object-cover"
               />
               {/* White Overlay Pill in Bottom-Left */}
-              <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-md flex items-center gap-3">
+              <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-2.5 shadow-md flex items-center gap-2 sm:gap-3">
                 <div className="flex -space-x-1.5">
-                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
-                  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=80&q=80" alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
-                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=80&q=80" alt="" className="w-7 h-7 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=80&q=80" alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=80&q=80" alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-white object-cover" />
+                  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=80&q=80" alt="" className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border-2 border-white object-cover" />
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-500 block leading-none">Customer Satisfaction</span>
-                  <span className="text-xs font-bold text-slate-900">⭐ 4.9/5</span>
+                  <span className="text-[9px] sm:text-[10px] text-slate-500 block leading-none">Customer Satisfaction</span>
+                  <span className="text-[11px] sm:text-xs font-bold text-slate-900">⭐ 4.9/5</span>
                 </div>
               </div>
             </div>
 
             {/* Right Col: White Testimonial Card with 5 Stars, Quote, Author & Carousel Controls (7 cols) */}
-            <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 shadow-xs flex flex-col justify-between">
+            <div className="lg:col-span-7 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 p-5 sm:p-8 lg:p-12 shadow-xs flex flex-col justify-between">
               <div>
                 {/* 5 Gold Stars */}
-                <div className="flex items-center gap-1 text-amber-500 mb-6">
+                <div className="flex items-center gap-1 text-amber-500 mb-4 sm:mb-6">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
 
                 {/* Quote */}
-                <blockquote className="text-base sm:text-xl text-slate-800 font-medium leading-relaxed mb-8">
-                  "{testimonials[currentTestimonialIdx].quote}"
+                <blockquote className="text-sm sm:text-lg lg:text-xl text-slate-800 font-medium leading-relaxed mb-6 sm:mb-8">
+                  &ldquo;{testimonials[currentTestimonialIdx].quote}&rdquo;
                 </blockquote>
 
                 {/* Author Avatar & Role */}
@@ -641,7 +641,7 @@ export default function HomeClient() {
                   <img
                     src={testimonials[currentTestimonialIdx].avatar}
                     alt={testimonials[currentTestimonialIdx].author}
-                    className="w-11 h-11 rounded-full object-cover border border-slate-200"
+                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border border-slate-200"
                   />
                   <div>
                     <span className="font-bold text-sm text-slate-900 block">
@@ -654,23 +654,23 @@ export default function HomeClient() {
                 </div>
               </div>
 
-              {/* Prev / Next Carousel Buttons (Bottom Right, matching Image 3) */}
-              <div className="flex items-center justify-end gap-2 pt-6 mt-6 border-t border-slate-100">
+              {/* Prev / Next Carousel Buttons */}
+              <div className="flex items-center justify-end gap-2 pt-4 sm:pt-6 mt-4 sm:mt-6 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setCurrentTestimonialIdx((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
                   aria-label="Previous testimonial"
-                  className="w-10 h-10 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-700 flex items-center justify-center transition-colors cursor-pointer"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button
                   type="button"
                   onClick={() => setCurrentTestimonialIdx((prev) => (prev === testimonials.length - 1 ? 0 : prev + 1))}
                   aria-label="Next testimonial"
-                  className="w-10 h-10 rounded-full bg-[#FF6B35] hover:bg-[#e85522] text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#FF6B35] hover:bg-[#e85522] text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
 
@@ -682,33 +682,33 @@ export default function HomeClient() {
       </section>
 
       {/* 7. POPULAR NEW DEVELOPMENTS RAIL */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-14 sm:pb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
             Popular New Projects
           </h2>
           <Link
             href="/projects"
-            className="text-xs sm:text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+            className="text-xs sm:text-sm font-semibold text-[#0A5C4F] hover:text-[#08493F] transition-colors"
           >
             See all
           </Link>
         </div>
 
-        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-3 -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 overflow-x-auto scrollbar-none snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
           {DUBAI_PROJECTS.map((project) => (
             <div
               key={project.id}
-              className="snap-start shrink-0 w-[290px] sm:w-auto flex flex-col justify-between group cursor-pointer"
+              className="snap-start shrink-0 w-[260px] sm:w-auto flex flex-col justify-between group cursor-pointer"
               onClick={() => openProjectModal(project)}
             >
-              <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-slate-100 shadow-xs group-hover:shadow-md transition-all">
+              <div className="relative w-full aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 shadow-xs group-hover:shadow-md transition-all">
                 <img
                   src={project.image}
                   alt={project.name}
                   className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                 />
-                <span className="absolute top-3.5 left-3.5 px-3 py-1 rounded-full bg-black/45 backdrop-blur-md text-white text-[11px] font-semibold">
+                <span className="absolute top-3 left-3 sm:top-3.5 sm:left-3.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-black/55 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-semibold">
                   {project.badge}
                 </span>
               </div>
@@ -716,12 +716,12 @@ export default function HomeClient() {
               <div className="mt-3 px-1">
                 <div className="flex items-center justify-between text-xs text-slate-500 font-medium">
                   <span>{project.developer}</span>
-                  <span className="text-indigo-600 font-semibold">{project.handoverDate}</span>
+                  <span className="text-[#0A5C4F] font-semibold">{project.handoverDate}</span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mt-0.5">
+                <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0A5C4F] transition-colors mt-0.5">
                   {project.name}
                 </h3>
-                <span className="text-base font-bold text-slate-900 block mt-0.5">
+                <span className="text-sm sm:text-base font-bold text-slate-900 block mt-0.5">
                   From {formatAED(project.startingPrice)}
                 </span>
                 <p className="text-xs text-slate-500 truncate mt-0.5">

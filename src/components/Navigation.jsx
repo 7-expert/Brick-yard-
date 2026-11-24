@@ -155,80 +155,71 @@ export default function Navigation() {
                 Admin Portal
               </Link>
             </nav>
-
-            <div className="pt-4">
-              <Link
-                href="/contact"
-                className="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center shadow-sm text-center"
-              >
-                List Your Property
-              </Link>
-            </div>
           </div>
         )}
       </header>
 
-      {/* MOBILE FIXED BOTTOM APP BAR (Exact Reference: Feed, Search, Saved, Chat, Profile) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 px-6 py-2 flex items-center justify-between shadow-lg">
+      {/* MOBILE FIXED BOTTOM APP BAR (Feed, Search, Projects, Saved, Contact) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-t border-slate-200/90 px-4 py-2 flex items-center justify-around shadow-lg">
         
-        {/* Tab 1: Feed (Active) */}
+        {/* Tab 1: Feed */}
         <Link
           href="/"
-          className={`flex flex-col items-center gap-0.5 ${
-            pathname === '/' ? 'text-indigo-600 font-bold' : 'text-slate-400 hover:text-slate-700'
+          className={`flex flex-col items-center gap-0.5 transition-colors ${
+            pathname === '/' ? 'text-[#0A5C4F] font-bold' : 'text-slate-400 hover:text-slate-700'
           }`}
         >
-          <Home className="w-5 h-5" />
+          <Home className="w-5 h-5 stroke-[2.2]" />
           <span className="text-[10px]">Feed</span>
         </Link>
 
         {/* Tab 2: Search */}
         <Link
           href="/listings"
-          className={`flex flex-col items-center gap-0.5 ${
-            pathname.startsWith('/listings') ? 'text-indigo-600 font-bold' : 'text-slate-400 hover:text-slate-700'
+          className={`flex flex-col items-center gap-0.5 transition-colors ${
+            pathname.startsWith('/listings') ? 'text-[#0A5C4F] font-bold' : 'text-slate-400 hover:text-slate-700'
           }`}
         >
-          <Search className="w-5 h-5" />
+          <Search className="w-5 h-5 stroke-[2.2]" />
           <span className="text-[10px]">Search</span>
         </Link>
 
-        {/* Tab 3: Saved */}
+        {/* Tab 3: Projects */}
         <Link
-          href="/saved"
-          className={`flex flex-col items-center gap-0.5 relative ${
-            pathname === '/saved' ? 'text-indigo-600 font-bold' : 'text-slate-400 hover:text-slate-700'
+          href="/projects"
+          className={`flex flex-col items-center gap-0.5 transition-colors ${
+            pathname === '/projects' ? 'text-[#0A5C4F] font-bold' : 'text-slate-400 hover:text-slate-700'
           }`}
         >
-          <Heart className="w-5 h-5" />
+          <Building2 className="w-5 h-5 stroke-[2.2]" />
+          <span className="text-[10px]">Projects</span>
+        </Link>
+
+        {/* Tab 4: Saved */}
+        <Link
+          href="/saved"
+          className={`flex flex-col items-center gap-0.5 relative transition-colors ${
+            pathname === '/saved' ? 'text-[#0A5C4F] font-bold' : 'text-slate-400 hover:text-slate-700'
+          }`}
+        >
+          <Heart className="w-5 h-5 stroke-[2.2]" />
           {savedCount > 0 && (
-            <span className="absolute -top-1 right-1 w-3.5 h-3.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
               {savedCount}
             </span>
           )}
           <span className="text-[10px]">Saved</span>
         </Link>
 
-        {/* Tab 4: Messages / Enquire */}
+        {/* Tab 5: Contact */}
         <Link
           href="/contact"
-          className={`flex flex-col items-center gap-0.5 ${
-            pathname === '/contact' ? 'text-indigo-600 font-bold' : 'text-slate-400 hover:text-slate-700'
+          className={`flex flex-col items-center gap-0.5 transition-colors ${
+            pathname === '/contact' ? 'text-[#0A5C4F] font-bold' : 'text-slate-400 hover:text-slate-700'
           }`}
         >
-          <MessageSquare className="w-5 h-5" />
+          <MessageSquare className="w-5 h-5 stroke-[2.2]" />
           <span className="text-[10px]">Contact</span>
-        </Link>
-
-        {/* Tab 5: Admin / Profile */}
-        <Link
-          href="/admin"
-          className={`flex flex-col items-center gap-0.5 ${
-            pathname.startsWith('/admin') ? 'text-indigo-600 font-bold' : 'text-slate-400 hover:text-slate-700'
-          }`}
-        >
-          <User className="w-5 h-5" />
-          <span className="text-[10px]">Profile</span>
         </Link>
 
       </div>

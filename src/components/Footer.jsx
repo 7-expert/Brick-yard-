@@ -5,11 +5,23 @@ export default function Footer() {
   return (
     <footer className="bg-[#191917] text-[#f2ebe1] w-full flex flex-col font-sans relative z-10 overflow-hidden">
       
+      {/* Mobile Top Brand Header (<sm only) */}
+      <div className="sm:hidden w-full px-6 pt-8 pb-4 border-b border-[#f2ebe1]/15 flex items-center justify-between">
+        <img 
+          src="/logo2.1.png" 
+          alt="Brickyard Logo" 
+          className="h-10 object-contain opacity-95" 
+        />
+        <span className="text-[#f2ebe1] font-bold text-lg tracking-widest uppercase font-sans">
+          Brickyard
+        </span>
+      </div>
+
       {/* Top Main Section */}
       <div className="flex w-full">
         
-        {/* Column 1: Brand & Ruler */}
-        <div className="w-24 md:w-32 lg:w-40 flex-shrink-0 border-r border-[#f2ebe1]/20 relative flex flex-col items-center min-h-[75vh]">
+        {/* Column 1: Brand & Ruler (Desktop: sm+) */}
+        <div className="hidden sm:flex w-24 md:w-32 lg:w-40 flex-shrink-0 border-r border-[#f2ebe1]/20 relative flex-col items-center min-h-[75vh]">
           
           {/* Ruler Ticks */}
           <div className="absolute right-0 top-0 h-full flex flex-col justify-between py-12 items-end z-0">
@@ -36,8 +48,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Columns 2, 3, 4 Wrapper */}
-        <div className="flex-grow flex flex-col lg:flex-row py-16 px-12 lg:px-24 relative gap-12 lg:gap-0">
+        {/* Columns 2, 3, 4 Wrapper (Responsive Mobile + Desktop) */}
+        <div className="flex-grow flex flex-col lg:flex-row py-8 sm:py-16 px-6 sm:px-12 lg:px-24 relative gap-10 lg:gap-0">
           
           {/* Column 2: Scroll Image */}
           <div className="w-full lg:w-[35%] flex flex-col justify-center relative group">
@@ -47,14 +59,14 @@ export default function Footer() {
              <div className="w-48 h-32 bg-black mb-6 rounded-sm overflow-hidden z-10 relative">
                <img src="/commercial_space_1790348379162.jpg" className="w-full h-full object-cover opacity-75 group-hover:opacity-100 transition-opacity duration-500" alt="Desk" />
              </div>
-             <h3 className="font-sans font-medium text-lg mb-1 tracking-tight">You've scrolled 1m</h3>
+             <h3 className="font-sans font-medium text-lg mb-1 tracking-tight">You&apos;ve scrolled 1m</h3>
              <p className="text-[13px] opacity-80 max-w-[220px] leading-snug">
-               That's the height of a bespoke <span className="underline cursor-pointer hover:text-white transition-colors">penthouse kitchen island</span>.
+               That&apos;s the height of a bespoke <span className="underline cursor-pointer hover:text-white transition-colors">penthouse kitchen island</span>.
              </p>
           </div>
 
           {/* Column 3: Contact */}
-          <div className="w-full lg:w-[25%] flex flex-col gap-10 justify-start pt-2">
+          <div className="w-full lg:w-[25%] flex flex-col gap-8 sm:gap-10 justify-start pt-2">
             <div>
               <h4 className="text-[15px] font-serif mb-2 opacity-90">Find us</h4>
               <address className="not-italic text-[14px] font-sans tracking-tight leading-relaxed opacity-80">
@@ -65,7 +77,7 @@ export default function Footer() {
             </div>
             <div>
               <h4 className="text-[15px] font-serif mb-2 opacity-90">Email</h4>
-              <a href="mailto:info@brickyard-ae-667726.hostingersite.com" className="text-[14px] font-sans tracking-tight opacity-80 hover:opacity-100 transition-opacity">
+              <a href="mailto:info@brickyard-ae-667726.hostingersite.com" className="text-[14px] font-sans tracking-tight opacity-80 hover:opacity-100 transition-opacity break-all sm:break-normal">
                 info@brickyard-ae-667726.hostingersite.com
               </a>
             </div>
@@ -99,7 +111,7 @@ export default function Footer() {
                 <a 
                   key={item.label} 
                   href={item.href} 
-                  className="text-[2.75rem] md:text-5xl lg:text-[4rem] xl:text-[4.5rem] font-bold font-sans tracking-tighter leading-[1.05] hover:opacity-70 transition-opacity w-fit"
+                  className="text-4xl sm:text-5xl lg:text-[4rem] xl:text-[4.5rem] font-bold font-sans tracking-tighter leading-[1.05] hover:opacity-70 transition-opacity w-fit"
                 >
                   {item.label}
                 </a>
@@ -114,10 +126,10 @@ export default function Footer() {
       <div className="flex w-full border-t border-[#f2ebe1]/20">
         
         {/* Empty left column matcher */}
-        <div className="hidden lg:block w-24 md:w-32 lg:w-40 flex-shrink-0 border-r border-[#f2ebe1]/20"></div>
+        <div className="hidden sm:block w-24 md:w-32 lg:w-40 flex-shrink-0 border-r border-[#f2ebe1]/20"></div>
         
         {/* Legal Links */}
-        <div className="flex-grow p-8 lg:px-24 lg:py-12 flex flex-col gap-1 text-[13px] opacity-70 font-sans tracking-tight">
+        <div className="flex-grow p-6 sm:p-8 lg:px-24 lg:py-12 flex flex-col gap-1 text-[13px] opacity-70 font-sans tracking-tight">
           <p>&copy; {new Date().getFullYear()} Brickyard Real Estate. All rights reserved.</p>
         </div>
       </div>
