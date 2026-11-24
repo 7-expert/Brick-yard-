@@ -16,7 +16,11 @@ import {
   Gem,
   Compass,
   Users,
-  Compass as JourneyIcon,
+  Play,
+  Coins,
+  Bed,
+  Home as HomeIcon,
+  X,
 } from 'lucide-react';
 import ListingCard from '@/components/ui/ListingCard';
 import LeadForm from '@/components/ui/LeadForm';
@@ -32,6 +36,7 @@ export default function HomeClient() {
   const [activeCategory, setActiveCategory] = useState('Houses');
   const [leadModalOpen, setLeadModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
 
   // SearchBar state (matching Image 2)
   const [purpose, setPurpose] = useState('sale'); // 'sale' | 'rent'
@@ -102,38 +107,88 @@ export default function HomeClient() {
   return (
     <div className="min-h-screen bg-[#FDFBF7] text-slate-900 pb-24 md:pb-16 font-sans">
       
-      {/* 1. HERO HEADER SECTION (Exact Reference Screenshot Layout) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 pb-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="max-w-3xl">
-            {/* Kicker */}
-            <span className="text-[#0A5C4F] font-bold text-xs tracking-widest uppercase block mb-3">
-              A better way to find home
-            </span>
-            {/* Main Title */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.08]">
-              Find a place that feels like you.
-            </h1>
-            {/* Subtitle */}
-            <p className="text-sm sm:text-base text-slate-500 mt-3 font-normal leading-relaxed">
-              Thoughtful homes, trusted details, and a little more room to imagine.
-            </p>
-          </div>
+      {/* 1. HERO SECTION (2-Column Architecture Matching Reference Screenshot) */}
+      <section className="relative overflow-hidden pt-8 sm:pt-14 pb-12 sm:pb-16 bg-[#FAF9F5]">
+        
+        {/* Soft background ambient glow */}
+        <div className="absolute top-1/4 right-1/4 w-[450px] h-[450px] bg-emerald-100/40 rounded-full blur-3xl pointer-events-none -z-10" />
 
-          {/* Explore the Map Pill Button */}
-          <Link
-            href="/listings?view=map"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200/90 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold shadow-xs self-start md:self-end transition-all hover:shadow-sm"
-          >
-            <span className="text-xs text-[#0A5C4F]">✦</span>
-            <span>Explore the map</span>
-          </Link>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            
+            {/* LEFT COLUMN: Headline, Kicker, Subtitle, Action Buttons */}
+            <div className="lg:col-span-6 space-y-6">
+              
+              {/* Kicker with horizontal line */}
+              <div className="flex items-center gap-2.5">
+                <span className="w-8 h-[2px] bg-[#0A5C4F]"></span>
+                <span className="text-[#0A5C4F] font-bold text-xs tracking-widest uppercase">
+                  A better way to find home
+                </span>
+              </div>
+
+              {/* Main Headline */}
+              <h1 className="text-4xl sm:text-6xl lg:text-[68px] font-extrabold text-slate-900 tracking-tight leading-[1.04]">
+                Find a place that <br className="hidden sm:inline" />
+                feels like <span className="text-[#0A5C4F]">you.</span>
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed max-w-lg">
+                Thoughtful homes, trusted details, and a little more room to imagine.
+              </p>
+
+              {/* Action Buttons: Explore map + Watch video */}
+              <div className="flex items-center gap-4 pt-2 flex-wrap">
+                <Link
+                  href="/listings?view=map"
+                  className="px-6 py-3 rounded-full bg-[#0A5C4F] hover:bg-[#08493F] text-white font-semibold text-sm flex items-center gap-2 shadow-sm transition-all cursor-pointer active:scale-98"
+                >
+                  <span>Explore the map</span>
+                  <span className="text-sm">→</span>
+                </Link>
+
+                <span className="w-[1px] h-6 bg-slate-300 hidden sm:inline-block"></span>
+
+                <button
+                  type="button"
+                  onClick={() => setVideoModalOpen(true)}
+                  className="inline-flex items-center gap-2.5 text-sm font-semibold text-slate-800 hover:text-[#0A5C4F] transition-colors cursor-pointer group"
+                >
+                  <span className="w-9 h-9 rounded-full bg-white border border-slate-200 group-hover:border-[#0A5C4F] flex items-center justify-center text-slate-900 shadow-xs transition-colors">
+                    <Play className="w-3.5 h-3.5 fill-slate-900 text-slate-900 ml-0.5" />
+                  </span>
+                  <span>Watch video</span>
+                </button>
+              </div>
+
+            </div>
+
+            {/* RIGHT COLUMN: Architectural Modern Luxury Villa with Arch Backdrop */}
+            <div className="lg:col-span-6 relative">
+              
+              {/* Soft arch shaped backdrop from screenshot */}
+              <div className="absolute -top-10 -right-10 w-[340px] h-[340px] sm:w-[480px] sm:h-[480px] rounded-full bg-[#EAE6DC]/60 -z-10 pointer-events-none" />
+
+              {/* Architectural Villa Photo with rounded top-left arch */}
+              <div className="relative rounded-3xl lg:rounded-tl-[200px] overflow-hidden shadow-2xl border-4 border-white aspect-[4/3] sm:aspect-[16/11]">
+                <img
+                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
+                  alt="Luxury Architectural Villa in Dubai"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+              </div>
+
+            </div>
+
+          </div>
         </div>
       </section>
 
-      {/* 2. FLOATING SEARCH CARD CONSOLE (Exact Reference Image 1 Layout) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="bg-white rounded-3xl border border-slate-200/80 shadow-[0_12px_40px_rgba(0,0,0,0.04)] p-4 sm:p-6 space-y-4">
+      {/* 2. FLOATING SEARCH CARD CONSOLE (Matching Reference Image) */}
+      <section className="relative z-20 -mt-6 sm:-mt-10 lg:-mt-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-5 sm:p-7 space-y-4">
           
           {/* Top Toggle Tabs: Buy, Rent, New projects, Commercial */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
@@ -176,76 +231,89 @@ export default function HomeClient() {
               
               {/* 1. LOCATION */}
               <div className="lg:col-span-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 hover:border-slate-300 transition-colors flex flex-col justify-center">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
                   Location
                 </label>
-                <input
-                  type="text"
-                  placeholder="Dubai, United Arab Emirates"
-                  value={locationInput}
-                  onChange={(e) => setLocationInput(e.target.value)}
-                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-700 truncate mt-0.5"
-                />
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Dubai, United Arab Emirates"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-800 truncate"
+                  />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" />
+                </div>
               </div>
 
               {/* 2. PROPERTY TYPE */}
-              <div className="lg:col-span-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 relative hover:border-slate-300 transition-colors flex flex-col justify-center">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="lg:col-span-3 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 hover:border-slate-300 transition-colors flex flex-col justify-center relative">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
                   Property Type
                 </label>
-                <select
-                  value={propertyType}
-                  onChange={(e) => setPropertyType(e.target.value)}
-                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-6 mt-0.5"
-                >
-                  <option value="">All residential</option>
-                  <option value="Apartment">Apartment</option>
-                  <option value="Villa">Villa</option>
-                  <option value="Townhouse">Townhouse</option>
-                  <option value="Penthouse">Penthouse</option>
-                  <option value="Duplex">Duplex</option>
-                  <option value="Commercial">Commercial</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 bottom-3 pointer-events-none" />
+                <div className="flex items-center gap-2">
+                  <HomeIcon className="w-4 h-4 text-slate-400 shrink-0" />
+                  <select
+                    value={propertyType}
+                    onChange={(e) => setPropertyType(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-4"
+                  >
+                    <option value="">All residential</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Villa">Villa</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Penthouse">Penthouse</option>
+                    <option value="Duplex">Duplex</option>
+                    <option value="Commercial">Commercial</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" />
+                </div>
               </div>
 
               {/* 3. PRICE RANGE */}
-              <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 relative hover:border-slate-300 transition-colors flex flex-col justify-center">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 hover:border-slate-300 transition-colors flex flex-col justify-center relative">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
                   Price Range
                 </label>
-                <select
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
-                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-6 mt-0.5"
-                >
-                  <option value="">AED 1M – 5M</option>
-                  <option value="2000000">Under 2M AED</option>
-                  <option value="5000000">AED 1M – 5M</option>
-                  <option value="10000000">AED 5M – 10M</option>
-                  <option value="25000000">AED 10M+</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 bottom-3 pointer-events-none" />
+                <div className="flex items-center gap-2">
+                  <Coins className="w-4 h-4 text-slate-400 shrink-0" />
+                  <select
+                    value={priceMax}
+                    onChange={(e) => setPriceMax(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-4"
+                  >
+                    <option value="">AED 1M – 5M</option>
+                    <option value="2000000">Under 2M AED</option>
+                    <option value="5000000">AED 1M – 5M</option>
+                    <option value="10000000">AED 5M – 10M</option>
+                    <option value="25000000">AED 10M+</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" />
+                </div>
               </div>
 
               {/* 4. BEDS & BATHS */}
-              <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 relative hover:border-slate-300 transition-colors flex flex-col justify-center">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <div className="lg:col-span-2 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 hover:border-slate-300 transition-colors flex flex-col justify-center relative">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">
                   Beds & Baths
                 </label>
-                <select
-                  value={beds}
-                  onChange={(e) => setBeds(e.target.value)}
-                  className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-6 mt-0.5"
-                >
-                  <option value="">Any</option>
-                  <option value="1">1+ Beds</option>
-                  <option value="2">2+ Beds</option>
-                  <option value="3">3+ Beds</option>
-                  <option value="4">4+ Beds</option>
-                  <option value="5">5+ Beds</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 bottom-3 pointer-events-none" />
+                <div className="flex items-center gap-2">
+                  <Bed className="w-4 h-4 text-slate-400 shrink-0" />
+                  <select
+                    value={beds}
+                    onChange={(e) => setBeds(e.target.value)}
+                    className="w-full bg-transparent border-none outline-none text-xs sm:text-sm font-semibold text-slate-900 appearance-none cursor-pointer pr-4"
+                  >
+                    <option value="">Any</option>
+                    <option value="1">1+ Beds</option>
+                    <option value="2">2+ Beds</option>
+                    <option value="3">3+ Beds</option>
+                    <option value="4">4+ Beds</option>
+                    <option value="5">5+ Beds</option>
+                  </select>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 pointer-events-none" />
+                </div>
               </div>
 
               {/* 5. SEARCH BUTTON */}
@@ -286,10 +354,13 @@ export default function HomeClient() {
                 </Link>
               </div>
 
-              <div className="text-[11px] font-medium text-slate-400 flex items-center gap-1">
-                <span className="border border-slate-200 rounded px-1.5 py-0.5 text-[10px] font-mono bg-slate-50">⌘ K</span>
+              <Link
+                href="/listings"
+                className="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition-colors"
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
                 <span>Quick search</span>
-              </div>
+              </Link>
             </div>
 
           </form>
@@ -297,32 +368,54 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* 3. SECTION: "Homes picked for you" (Exact Reference Layout) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-6">
-        <div className="flex items-end justify-between mb-6">
+      {/* 3. SECTION: "Homes picked for you" (Matching Reference Image with Carousel Arrows) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-12">
+        <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+            {/* Green line kicker */}
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-6 h-[2px] bg-[#0A5C4F]"></span>
+              <span className="text-[#0A5C4F] font-bold text-xs tracking-widest uppercase">
+                Premium Properties
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
               Homes picked for you
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              1,248 homes in Dubai · Updated just now
-            </p>
           </div>
 
-          {/* Recommended Sort Pill */}
-          <div className="relative">
+          {/* Carousel Next/Prev Arrow Buttons from Screenshot */}
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 shadow-xs hover:bg-slate-50"
+              onClick={() => {
+                const el = document.getElementById('homes-picked-grid');
+                if (el) el.scrollBy({ left: -340, behavior: 'smooth' });
+              }}
+              aria-label="Previous homes"
+              className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 flex items-center justify-center transition-colors shadow-xs cursor-pointer"
             >
-              <span>Recommended</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById('homes-picked-grid');
+                if (el) el.scrollBy({ left: 340, behavior: 'smooth' });
+              }}
+              aria-label="Next homes"
+              className="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* 3-Column Grid Matching Reference */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+        <div
+          id="homes-picked-grid"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
+        >
           {DUBAI_PROPERTIES.slice(0, 6).map((property) => (
             <div key={property.id}>
               <ListingCard property={property} />
@@ -622,6 +715,42 @@ export default function HomeClient() {
                 setTimeout(() => setLeadModalOpen(false), 2000);
               }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* VIDEO TOUR LIGHTBOX MODAL */}
+      {videoModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fadeIn">
+          <div className="relative w-full max-w-4xl bg-slate-950 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+            <button
+              type="button"
+              onClick={() => setVideoModalOpen(false)}
+              aria-label="Close video"
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="aspect-video w-full bg-black">
+              <video
+                src="/video.mp4"
+                controls
+                autoPlay
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="p-4 sm:p-5 bg-slate-900 flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <h4 className="font-bold text-white text-base">Brickyard Luxury Walkthrough</h4>
+                <p className="text-xs text-slate-400">Cinematic Dubai property tour & architectural overview</p>
+              </div>
+              <Link
+                href="/listings"
+                className="px-4 py-2 rounded-xl bg-[#0A5C4F] hover:bg-[#08493F] text-white text-xs font-bold transition-colors"
+              >
+                Browse All Homes
+              </Link>
+            </div>
           </div>
         </div>
       )}

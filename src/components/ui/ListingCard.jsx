@@ -38,7 +38,7 @@ export default function ListingCard({ property, className = '' }) {
     } catch (e) {}
   };
 
-  const badgeText = property.badge || (property.isPremium ? 'Verified' : 'New Listing');
+  const badgeText = property.purpose === 'rent' ? 'For Rent' : 'For Sale';
   const numPrice = typeof property.price === 'number' ? property.price : Number(String(property.price || 0).replace(/[^0-9.-]+/g, ''));
   const sqftPrice = (numPrice && property.sqft) ? Math.round(numPrice / property.sqft) : null;
 
@@ -56,11 +56,10 @@ export default function ListingCard({ property, className = '' }) {
           />
         </Link>
 
-        {/* Top-Left '✦ VERIFIED' / 'NEW LISTING' Pill Badge */}
+        {/* Top-Left 'For Sale' / 'For Rent' Dark Pill Badge (Matching Screenshot) */}
         <div className="absolute top-3 left-3 pointer-events-none z-10">
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-white/95 backdrop-blur-xs text-slate-900 text-[10px] font-bold tracking-wider uppercase shadow-xs">
-            <span className="text-[#0A5C4F]">✦</span>
-            <span>{badgeText}</span>
+          <span className="inline-flex items-center px-3.5 py-1 rounded-full bg-[#1E293B]/85 backdrop-blur-xs text-white text-[11px] font-bold tracking-wide shadow-xs">
+            {badgeText}
           </span>
         </div>
 

@@ -47,53 +47,62 @@ export default function Navigation() {
 
   return (
     <>
-      {/* TOP HEADER (Matching Reference: Large Logo Left, Links Center, List Property + Avatar Right) */}
+      {/* TOP HEADER (Matching Reference Image: Official Brickyard Real Estate Logo, Active Underline, List Property & S Avatar) */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
           
-          {/* Left: Brand Logo (Significantly Increased Size) */}
+          {/* Left: Brand Logo matching screenshot */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0A5C4F]/10 flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
               <img
                 src="/logo1_crop.png"
                 alt="Brickyard Logo"
                 className="w-full h-full object-contain"
               />
             </div>
-            <span className="font-extrabold text-2xl sm:text-3xl tracking-tight text-slate-900 lowercase font-sans">
-              brickyard
-            </span>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-base sm:text-lg tracking-wider text-slate-900 uppercase font-sans leading-none">
+                Brickyard
+              </span>
+              <span className="text-[10px] tracking-widest text-slate-500 uppercase font-medium mt-0.5">
+                Real Estate
+              </span>
+            </div>
+            <span className="hidden sm:inline-block w-[1px] h-6 bg-slate-200 ml-2"></span>
           </Link>
 
-          {/* Center: Desktop Nav Links (Matching Reference Image) */}
+          {/* Center: Desktop Nav Links with active indicator matching screenshot */}
           <nav className="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
-            {navLinks.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={`hover:text-slate-900 transition-colors ${
-                  pathname === item.href || (item.href === '/' && pathname === '/')
-                    ? 'text-slate-900 font-bold'
-                    : ''
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navLinks.map((item) => {
+              const isActive = pathname === item.href || (item.href === '/' && pathname === '/');
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className={`relative py-1.5 transition-colors ${
+                    isActive
+                      ? 'text-slate-900 font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2.5px] after:bg-[#0A5C4F]'
+                      : 'hover:text-slate-900'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Right: Actions, List Your Property & Avatar */}
+          {/* Right: Actions, List Your Property & Avatar matching screenshot */}
           <div className="flex items-center gap-3 sm:gap-4">
             
-            {/* List Your Property Button */}
+            {/* List Your Property Pill Button */}
             <Link
               href="/contact"
-              className="hidden lg:inline-flex text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors"
+              className="hidden sm:inline-flex px-4 py-1.5 rounded-full border border-slate-300 hover:border-slate-400 text-xs font-semibold text-slate-800 transition-colors shadow-xs"
             >
               List your property
             </Link>
 
-            {/* User Avatar Circle from Reference Image */}
+            {/* User Avatar Circle S from Reference Image */}
             <Link
               href="/saved"
               title="Saved Homes & Profile"
@@ -106,11 +115,11 @@ export default function Navigation() {
             <Link
               href="/saved"
               aria-label="Saved listings"
-              className="tap-target relative p-2 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center cursor-pointer"
+              className="tap-target relative p-1.5 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center cursor-pointer"
             >
               <Heart className="w-5 h-5 text-slate-700" />
               {savedCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute top-0 right-0 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
                   {savedCount}
                 </span>
               )}
