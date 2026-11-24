@@ -91,35 +91,18 @@ export default function Navigation() {
             })}
           </nav>
 
-          {/* Right: Actions, List Your Property & Avatar matching screenshot */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            
-            {/* List Your Property Pill Button */}
-            <Link
-              href="/contact"
-              className="hidden sm:inline-flex px-4 py-1.5 rounded-full border border-slate-300 hover:border-slate-400 text-xs font-semibold text-slate-800 transition-colors shadow-xs"
-            >
-              List your property
-            </Link>
-
-            {/* User Avatar Circle S from Reference Image */}
-            <Link
-              href="/saved"
-              title="Saved Homes & Profile"
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#EAD8CD] text-[#7A4B3A] font-bold text-xs sm:text-sm flex items-center justify-center shadow-xs hover:ring-2 hover:ring-[#0A5C4F]/20 transition-all cursor-pointer"
-            >
-              S
-            </Link>
-
-            {/* Saved Count Heart */}
+          {/* Right: Actions (Saved listings & Mobile Menu) */}
+          <div className="flex items-center gap-3">
+            {/* Saved Count Heart with Animated Badge */}
             <Link
               href="/saved"
               aria-label="Saved listings"
-              className="tap-target relative p-1.5 rounded-full hover:bg-slate-100 text-slate-700 flex items-center justify-center cursor-pointer"
+              className="tap-target relative p-2 rounded-full hover:bg-slate-100/80 text-slate-700 flex items-center justify-center transition-colors cursor-pointer group"
+              title="Saved properties"
             >
-              <Heart className="w-5 h-5 text-slate-700" />
+              <Heart className="w-5 h-5 text-slate-700 group-hover:text-red-500 transition-colors" />
               {savedCount > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">
                   {savedCount}
                 </span>
               )}
