@@ -23,10 +23,18 @@ export function getDeviceType() {
 export async function trackEvent(eventType, eventName, metadata = {}) {
   if (typeof window === 'undefined') return;
 
+  const currentPath = window.location.pathname;
+  const targetPath = metadata.pagePath || currentPath;
+
+  // Never track admin panel activity
+  if (currentPath.startsWith('/admin') || targetPath.startsWith('/admin')) {
+    return;
+  }
+
   const eventPayload = {
     eventType,
     eventName,
-    pagePath: window.location.pathname + window.location.search,
+    pagePath: currentPath + window.location.search,
     device: getDeviceType(),
     timestamp: new Date().toISOString(),
     referrer: document.referrer || 'direct',

@@ -10,8 +10,11 @@ export default function AnalyticsTracker() {
   const searchParams = useSearchParams();
   const lastPathRef = useRef('');
 
-  // 1. Track page impressions on navigation
+  // 1. Track page impressions on navigation (public visitor routes only)
   useEffect(() => {
+    // Strictly do not track admin panel activity
+    if (!pathname || pathname.startsWith('/admin')) return;
+
     const fullPath = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
     
     // Avoid double logging the exact same path
@@ -39,6 +42,9 @@ export default function AnalyticsTracker() {
   // 2. Automatically capture WhatsApp, Phone Call and External clicks
   useEffect(() => {
     function handleDocumentClick(e) {
+      // Ignore any clicks inside the admin panel
+      if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) return;
+
       const target = e.target.closest('a, button');
       if (!target) return;
 

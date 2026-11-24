@@ -25,8 +25,13 @@ export async function POST(request) {
       return NextResponse.json({ success: true });
     }
 
-    // Auto-resolve propertyId and propertyTitle from page_path if not explicitly provided
     const pagePath = event.pagePath || event.page_path || '';
+    // Strictly do not record admin panel actions - only real public visitors
+    if (pagePath.startsWith('/admin')) {
+      return NextResponse.json({ success: true, ignored: true });
+    }
+
+    // Auto-resolve propertyId and propertyTitle from page_path if not explicitly provided
     let propId = event.propertyId || event.property_id || (event.metadata && (event.metadata.propertyId || event.metadata.property_id)) || null;
     let propTitle = event.propertyTitle || event.property_title || (event.metadata && (event.metadata.propertyTitle || event.metadata.property_title)) || null;
 
@@ -116,8 +121,14 @@ export async function GET(request) {
       }
     } catch (e) {}
 
-    const localEvents = getAnalyticsEvents();
-    const recordedEvents = [...supabaseEvents];
+    // Exclude any admin events so analytics strictly reflect public user behavior
+    const isPublicUserEvent = (e) => {
+      const p = (e.page_path || e.pagePath || (e.metadata && (e.metadata.pagePath || e.metadata.page_path)) || '').toLowerCase();
+      return !p.startsWith('/admin');
+    };
+
+    const localEvents = getAnalyticsEvents().filter(isPublicUserEvent);
+    const recordedEvents = [...supabaseEvents.filter(isPublicUserEvent)];
 
     localEvents.forEach((le) => {
       if (!recordedEvents.some((e) => e.id === le.id)) {
@@ -328,10 +339,11 @@ export async function GET(request) {
       percentage: totalImpressions > 0 ? Math.round((count / totalImpressions) * 100) : 0,
     }));
 
-    // Real recent activity stream strictly from real leads and recorded events
-    const recentActivity = [
-      ...trueLeadsList.slice(0, 8).map((lead) => ({
+    // Real recent activity stream strictly from real public visitor leads and visitor events
+    const combinedActivity = [
+      ...trueLeadsList.slice(0, 10).map((lead) => ({
         type: 'true_lead',
+        rawTime: lead.created_at || new Date().toISOString(),
         title: `True Lead: ${lead.full_name || lead.first_name || 'Visitor'} submitted inquiry`,
         detail: `${lead.inquiry_type || 'Property Inquiry'} for ${lead.property_title || lead.plan_title || 'Dubai Listing'}`,
         time: lead.created_at ? new Date(lead.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently',
@@ -339,8 +351,9 @@ export async function GET(request) {
         badge: 'True Lead',
         badgeColor: 'bg-emerald-500/10 text-emerald-400',
       })),
-      ...recordedEvents.slice(0, 8).map((ev) => ({
+      ...recordedEvents.slice(0, 15).map((ev) => ({
         type: ev.event_type,
+        rawTime: ev.created_at || new Date().toISOString(),
         title: ev.event_name ? ev.event_name.replace(/_/g, ' ').toUpperCase() : 'Visitor Event',
         detail: ev.property_title ? `Interaction with ${ev.property_title}` : `Page: ${ev.page_path || '/'}`,
         time: ev.created_at ? new Date(ev.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently',
@@ -348,7 +361,10 @@ export async function GET(request) {
         badge: ev.event_type === 'click' ? 'Click' : 'Impression',
         badgeColor: ev.event_type === 'click' ? 'bg-amber-500/10 text-amber-400' : 'bg-slate-700/30 text-slate-300',
       })),
-    ].slice(0, 10);
+    ];
+
+    combinedActivity.sort((a, b) => new Date(b.rawTime) - new Date(a.rawTime));
+    const recentActivity = combinedActivity.slice(0, 10);
 
     return NextResponse.json({
       success: true,

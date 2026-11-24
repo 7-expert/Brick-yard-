@@ -25,7 +25,11 @@ if (!globalThis.__brickyard_store) {
   try {
     if (fs.existsSync(ANALYTICS_FILE)) {
       const content = fs.readFileSync(ANALYTICS_FILE, 'utf8');
-      globalThis.__brickyard_store.analytics = JSON.parse(content);
+      const parsed = JSON.parse(content);
+      // Strictly store only public visitor activities, never admin actions
+      globalThis.__brickyard_store.analytics = Array.isArray(parsed)
+        ? parsed.filter((e) => !((e.page_path || e.pagePath || '').startsWith('/admin')))
+        : [];
     }
   } catch (e) {
     globalThis.__brickyard_store.analytics = [];
@@ -117,11 +121,17 @@ export function deleteBooking(id) {
 
 export function saveAnalyticsEvent(event) {
   try {
+    const pagePath = event.pagePath || event.page_path || '/';
+    // Strictly ignore admin activity
+    if (pagePath.startsWith('/admin')) {
+      return null;
+    }
+
     const item = {
       id: event.id || `ev-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
       event_type: event.eventType || event.event_type || 'impression',
       event_name: event.eventName || event.event_name || 'page_view',
-      page_path: event.pagePath || event.page_path || '/',
+      page_path: pagePath,
       device: event.device || 'desktop',
       property_id: event.propertyId || event.property_id || null,
       property_title: event.propertyTitle || event.property_title || null,
@@ -146,6 +156,7 @@ export function saveAnalyticsEvent(event) {
 }
 
 export function getAnalyticsEvents() {
-  return globalThis.__brickyard_store?.analytics || [];
+  const all = globalThis.__brickyard_store?.analytics || [];
+  return all.filter((e) => !((e.page_path || e.pagePath || '').startsWith('/admin')));
 }
 
